@@ -9,7 +9,7 @@ public class UserMainFrame extends JFrame {
 	String Uname;
 	ImageIcon HeadImg;
 	JLabel HeadL, UnameL, SignL;
-	UserMainFrame() {
+	UserMainFrame(User user) {
 		initFrame();
 		setFrameLook();
 		actionProcessor();
@@ -33,6 +33,7 @@ public class UserMainFrame extends JFrame {
 		HeadL = new JLabel(HeadImg);
 		UnameL = new JLabel(Uname);
 		SignL = new JLabel("<html>个签Demo个签Demo个签Demo个签Demo个签Demo个签Demo个签Demo个签Demo个签Demo个签Demo个签Demo个签Demo</html>");
+		//SignL = new JLabel(User);
 	}
 	
 	public void setFrameLook() {

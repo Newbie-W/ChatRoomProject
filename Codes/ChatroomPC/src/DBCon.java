@@ -46,6 +46,12 @@ public class DBCon {
 		}
 	}
 	
+	public String getInfo(Statement Stmt, String temp) {
+		String result;
+		
+		return null;
+	}
+	
 	public int searchId(String name) {	//备用，用于实现输入用户名能够实时显示头像
 		int i = 0;
 		

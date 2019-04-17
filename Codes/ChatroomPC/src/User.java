@@ -2,6 +2,7 @@
 public class User {
 	private String Uname;
 	private String Pwd;
+	private String Sign;
 	private String Identity;
 	private String IP;
 	User() {
@@ -18,6 +19,12 @@ public class User {
 	}
 	public void setPwd(String pwd) {
 		Pwd = pwd;
+	}
+	public String getSign() {
+		return Sign;
+	}
+	public void setSign(String sign) {
+		Sign = sign;
 	}
 	public String getIdentity() {
 		return Identity;
