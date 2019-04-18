@@ -5,15 +5,15 @@ import javax.swing.*;
 import java.awt.event.*;
 
 public class LoginFrame extends JFrame implements ActionListener, MouseListener,MouseMotionListener {
-	JPanel CtrlBtnP, PicP, InputP, LoginBtnP;//
-	ImageIcon Img, HeadImg;	//, LogoImg
-	JLabel BgL, HeadL, RegisterL, ForgetPwdL, UnameL, PwdL, TitleL;	//, LogoL
-	JTextField UnameTf;
-	JPasswordField PwdF;
-	JButton CloseBtn, MinBtn, LoginBtn;
-	Toolkit Kit;
-	Dimension ScreenSize;
-	int x, y, StartX, StartY, EndX, EndY;
+	JPanel ctrlBtnP, picP, inputP, loginBtnP;//
+	ImageIcon img, headImg;	//, LogoImg
+	JLabel bgL, headL, registerL, forgetPwdL, unameL, pwdL, titleL;	//, LogoL
+	JTextField unameTf;
+	JPasswordField pwdF;
+	JButton closeBtn, minBtn, loginBtn;
+	Toolkit kit;
+	Dimension screenSize;
+	int x, y, startX, startY, endX, endY;
 	DBCon con; 
 	LoginFrame(User UserInfo) {
 		System.out.println(UserInfo.getIdentity());
@@ -30,111 +30,111 @@ public class LoginFrame extends JFrame implements ActionListener, MouseListener,
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setResizable(false);
 		setUndecorated(true);
-		CtrlBtnP = new JPanel();
-		PicP = new JPanel();
-		InputP = new JPanel();
-		LoginBtnP = new JPanel();
-		Img = new ImageIcon("qq1.png");
-		HeadImg = new ImageIcon("1.jpg");
-		BgL =  new JLabel(Img);
-		HeadL = new JLabel(HeadImg);
-		RegisterL = new JLabel("注册账号");
-		ForgetPwdL = new JLabel("忘记密码？");
-		RegisterL.setFont(new Font("宋体", 0, 11));
-		ForgetPwdL.setFont(new Font("宋体", 0, 11));
-		RegisterL.setForeground(new Color(128, 128, 255));
-		ForgetPwdL.setForeground(new Color(128, 128, 255));
-		UnameL = new JLabel("用户名");
-		PwdL = new JLabel("密码");
-		TitleL = new JLabel("WeTalk");
-		TitleL.setFont(new Font("黑体", 1, 16));
-		TitleL.setForeground(Color.lightGray);
-		UnameTf = new JTextField();
-		PwdF = new JPasswordField();
-		CloseBtn =  new JButton("X");
-		MinBtn = new JButton("—");
-		LoginBtn = new JButton("登录");
-		Kit = Toolkit.getDefaultToolkit();
-		ScreenSize = Kit.getScreenSize();
-		x = (ScreenSize.width-getWidth())/2;
-		y = ScreenSize.height/2-getHeight()/2;
+		ctrlBtnP = new JPanel();
+		picP = new JPanel();
+		inputP = new JPanel();
+		loginBtnP = new JPanel();
+		img = new ImageIcon("qq1.png");
+		headImg = new ImageIcon("1.jpg");
+		bgL =  new JLabel(img);
+		headL = new JLabel(headImg);
+		registerL = new JLabel("注册账号");
+		forgetPwdL = new JLabel("忘记密码？");
+		registerL.setFont(new Font("宋体", 0, 11));
+		forgetPwdL.setFont(new Font("宋体", 0, 11));
+		registerL.setForeground(new Color(128, 128, 255));
+		forgetPwdL.setForeground(new Color(128, 128, 255));
+		unameL = new JLabel("用户名");
+		pwdL = new JLabel("密码");
+		titleL = new JLabel("WeTalk");
+		titleL.setFont(new Font("黑体", 1, 16));
+		titleL.setForeground(Color.lightGray);
+		unameTf = new JTextField();
+		pwdF = new JPasswordField();
+		closeBtn =  new JButton("X");
+		minBtn = new JButton("—");
+		loginBtn = new JButton("登录");
+		kit = Toolkit.getDefaultToolkit();
+		screenSize = kit.getScreenSize();
+		x = (screenSize.width-getWidth())/2;
+		y = screenSize.height/2-getHeight()/2;
 		setLocation(x, y);
 	}
 	
 	private void setFrameLook() {
-		//CtrlBtnP
-		CtrlBtnP.setLayout(null);
-		CtrlBtnP.setPreferredSize(new Dimension(400, 110));
-		CloseBtn.setContentAreaFilled(false);
-		CloseBtn.setFocusPainted(false);
-		CloseBtn.setForeground(Color.white);
-		CloseBtn.setBounds(350, 0, 50, 30);
-		MinBtn.setContentAreaFilled(false);
-		MinBtn.setFocusPainted(false);
-		MinBtn.setForeground(Color.white);
-		MinBtn.setBounds(300, 0, 50, 30);
-		TitleL.setBounds(10, 0, 100, 30);
-		BgL.setBounds(0, 0, 400, 102);
-		CtrlBtnP.add(TitleL); CtrlBtnP.add(MinBtn); CtrlBtnP.add(CloseBtn); CtrlBtnP.add(BgL);	/*添加顺序颠倒，则关闭键会被BgL盖住*/
+		//ctrlBtnP
+		ctrlBtnP.setLayout(null);
+		ctrlBtnP.setPreferredSize(new Dimension(400, 110));
+		closeBtn.setContentAreaFilled(false);
+		closeBtn.setFocusPainted(false);
+		closeBtn.setForeground(Color.white);
+		closeBtn.setBounds(350, 0, 50, 30);
+		minBtn.setContentAreaFilled(false);
+		minBtn.setFocusPainted(false);
+		minBtn.setForeground(Color.white);
+		minBtn.setBounds(300, 0, 50, 30);
+		titleL.setBounds(10, 0, 100, 30);
+		bgL.setBounds(0, 0, 400, 102);
+		ctrlBtnP.add(titleL); ctrlBtnP.add(minBtn); ctrlBtnP.add(closeBtn); ctrlBtnP.add(bgL);	/*添加顺序颠倒，则关闭键会被bgL盖住*/
 		
-		//PicP
-		PicP.setPreferredSize(new Dimension(95, 0));
-		PicP.setLayout(null); //new FlowLayout(FlowLayout.RIGHT)
-		HeadL.setBounds(15, 35, 70, 70);
-		HeadL.setBorder(BorderFactory.createLineBorder(Color.lightGray, 3));
-		PicP.add(HeadL);
+		//picP
+		picP.setPreferredSize(new Dimension(95, 0));
+		picP.setLayout(null); //new FlowLayout(FlowLayout.RIGHT)
+		headL.setBounds(15, 35, 70, 70);
+		headL.setBorder(BorderFactory.createLineBorder(Color.lightGray, 3));
+		picP.add(headL);
 		
-		//InputP
-		InputP.setLayout(null);
-		UnameL.setBounds(10, 40, 75, 20);
-		UnameL.setForeground(new Color(0, 0, 0));
-		UnameL.setFont(new Font("楷体", 0, 16));		//1则加粗
-		PwdL.setBounds(10, 75, 55, 20);
-		PwdL.setForeground(new Color(0, 0, 0));
-		PwdL.setFont(new Font("楷体", 0, 16));
-		UnameTf.setBounds(60, 40, 175, 30);
-		PwdF.setBounds(60, 75, 175, 30);
-		RegisterL.setBounds(240, 40, 60, 20);
-		ForgetPwdL.setBounds(240, 75, 65, 20);
-		InputP.add(UnameL); InputP.add(PwdL); InputP.add(UnameTf); InputP.add(PwdF); InputP.add(RegisterL); InputP.add(ForgetPwdL);
+		//inputP
+		inputP.setLayout(null);
+		unameL.setBounds(10, 40, 75, 20);
+		unameL.setForeground(new Color(0, 0, 0));
+		unameL.setFont(new Font("楷体", 0, 16));		//1则加粗
+		pwdL.setBounds(10, 75, 55, 20);
+		pwdL.setForeground(new Color(0, 0, 0));
+		pwdL.setFont(new Font("楷体", 0, 16));
+		unameTf.setBounds(60, 40, 175, 30);
+		pwdF.setBounds(60, 75, 175, 30);
+		registerL.setBounds(240, 40, 60, 20);
+		forgetPwdL.setBounds(240, 75, 65, 20);
+		inputP.add(unameL); inputP.add(pwdL); inputP.add(unameTf); inputP.add(pwdF); inputP.add(registerL); inputP.add(forgetPwdL);
 		
-		//LoginBtnP
-		LoginBtnP.setLayout(null);
-		LoginBtnP.setPreferredSize(new Dimension(390, 40));
-		LoginBtn.setBounds(155, 0, 100, 30);
-		LoginBtn.setBackground(Color.WHITE);
-		LoginBtnP.add(LoginBtn);
+		//loginBtnP
+		loginBtnP.setLayout(null);
+		loginBtnP.setPreferredSize(new Dimension(390, 40));
+		loginBtn.setBounds(155, 0, 100, 30);
+		loginBtn.setBackground(Color.WHITE);
+		loginBtnP.add(loginBtn);
 		
-		add(CtrlBtnP, BorderLayout.NORTH);
-		add(PicP, BorderLayout.WEST);
-		add(InputP, BorderLayout.CENTER);
-		add(LoginBtnP, BorderLayout.SOUTH);
+		add(ctrlBtnP, BorderLayout.NORTH);
+		add(picP, BorderLayout.WEST);
+		add(inputP, BorderLayout.CENTER);
+		add(loginBtnP, BorderLayout.SOUTH);
 	}
 	
 	private void actionProcessor() {
-		MinBtn.addActionListener(this);
-		CloseBtn.addActionListener(this);
-		LoginBtn.addActionListener(this);
-		RegisterL.addMouseListener(this);
-		CtrlBtnP.addMouseListener(this);
-		ForgetPwdL.addMouseListener(this);
-		CtrlBtnP.addMouseMotionListener(this);
-		CtrlBtnP.addMouseListener(this);
+		minBtn.addActionListener(this);
+		closeBtn.addActionListener(this);
+		loginBtn.addActionListener(this);
+		registerL.addMouseListener(this);
+		ctrlBtnP.addMouseListener(this);
+		forgetPwdL.addMouseListener(this);
+		ctrlBtnP.addMouseMotionListener(this);
+		ctrlBtnP.addMouseListener(this);
 		addMouseMotionListener(this);
 		addMouseListener(this);
 	}
 	
 	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == CloseBtn) {
+		if (e.getSource() == closeBtn) {
 			System.exit(0);
 			con.closeSt();
-		} else if (e.getSource() == MinBtn) {
+		} else if (e.getSource() == minBtn) {
 			this.setExtendedState(this.ICONIFIED);
-		} else  if (e.getSource() == LoginBtn) {
-			String Uname = UnameTf.getText();
-			String Pwd = new String(PwdF.getPassword());
+		} else  if (e.getSource() == loginBtn) {
+			String uname = unameTf.getText();
+			String pwd = new String(pwdF.getPassword());
 			if (con == null) con = new DBCon();		//我加这句if是否必要呢？
-			String temp = "select * from UserInfo where 用户名 = '"+Uname+"' and 密码='"+Pwd+"'";
+			String temp = "select * from UserInfo where 用户名 = '"+uname+"' and 密码='"+pwd+"'";
 			System.out.println(temp+" , "+con.getSelect(con.getSt(), temp));
 			if (con.getSelect(con.getSt(), temp) == "") {
 				JOptionPane.showMessageDialog(null, "登录失败");
@@ -145,9 +145,9 @@ public class LoginFrame extends JFrame implements ActionListener, MouseListener,
 	}
 
 	public void mouseClicked(MouseEvent e) {
-		if (e.getSource() == RegisterL) {
+		if (e.getSource() == registerL) {
 			System.out.println("你点击了注册，等待跳转中（误）");
-		} else if (e.getSource() == ForgetPwdL) {
+		} else if (e.getSource() == forgetPwdL) {
 			System.out.println("忘记密码？试试重新注册？（误）");
 		}
 		//System.out.println("Test");
@@ -158,17 +158,17 @@ public class LoginFrame extends JFrame implements ActionListener, MouseListener,
 	public void mouseExited(MouseEvent arg0) {}
 
 	public void mousePressed(MouseEvent e) {
-		StartX = e.getX();
-		StartY = e.getY();
+		startX = e.getX();
+		startY = e.getY();
 	}
 
 	public void mouseReleased(MouseEvent arg0) {}
 
 	public void mouseDragged(MouseEvent e) {
-		EndX = e.getX();
-		EndY = e.getY();
-		int locX = EndX - StartX + getLocation().x;
-		int locY = EndY - StartY + getLocation().y; 
+		endX = e.getX();
+		endY = e.getY();
+		int locX = endX - startX + getLocation().x;
+		int locY = endY - startY + getLocation().y; 
 		this.setLocation(locX, locY);
 	}
 	

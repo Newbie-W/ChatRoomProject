@@ -3,17 +3,17 @@ import java.awt.event.*;
 import javax.swing.*;
 
 public class ChatFrame extends JFrame implements ActionListener {
-	JPanel InfoP;
-	JTextField MsgSendTf;
-	JTextArea ContentTa;
-	JButton SendBtn;
-	Toolkit Kit;
-	Dimension ScreenSize;
+	JPanel infoP;
+	JTextField msgSendTf;
+	JTextArea contentTa;
+	JButton sendBtn;
+	Toolkit kit;
+	Dimension screenSize;
 	int x, y;
-	DefaultListModel ListModel;
-	JList  UserList;
-	JScrollPane ContentScroll, UserListScroll;
-	JSplitPane SideBarSplitP;
+	DefaultListModel listModel;
+	JList  userList;
+	JScrollPane contentScroll, userListScroll;
+	JSplitPane sideBarSplitP;
 	ChatFrame() {
 		initFrame();
 		setFrameLook();
@@ -26,63 +26,63 @@ public class ChatFrame extends JFrame implements ActionListener {
 		setSize(720, 495);
 		setTitle("ÈºÁÄ");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		InfoP = new JPanel();
-		MsgSendTf = new JTextField("11");
-		ContentTa = new JTextArea();
-		ContentTa.setEditable(false);
-		ContentTa.setForeground(Color.BLUE);
-		SendBtn = new JButton("·¢ËÍ");
-		Kit = Toolkit.getDefaultToolkit();
-		ScreenSize = Kit.getScreenSize();
-		x = (ScreenSize.width - getWidth())/2;
-		y = (ScreenSize.height - getHeight())/2;
-		ListModel = new DefaultListModel();
-		UserList = new JList(ListModel);
-		ContentScroll = new JScrollPane(ContentTa);
-		UserListScroll  = new JScrollPane(UserList);
-		SideBarSplitP = new JSplitPane(JSplitPane.VERTICAL_SPLIT, InfoP, UserListScroll);
+		infoP = new JPanel();
+		msgSendTf = new JTextField("11");
+		contentTa = new JTextArea();
+		contentTa.setEditable(false);
+		contentTa.setForeground(Color.BLUE);
+		sendBtn = new JButton("·¢ËÍ");
+		kit = Toolkit.getDefaultToolkit();
+		screenSize = kit.getScreenSize();
+		x = (screenSize.width - getWidth())/2;
+		y = (screenSize.height - getHeight())/2;
+		listModel = new DefaultListModel();
+		userList = new JList(listModel);
+		contentScroll = new JScrollPane(contentTa);
+		userListScroll  = new JScrollPane(userList);
+		sideBarSplitP = new JSplitPane(JSplitPane.VERTICAL_SPLIT, infoP, userListScroll);
 		setLocation(x, y);
 	}
 	
 	public void setFrameLook() {
 		setLayout(null);
-		ContentScroll.setBounds(10, 5, 500, 410);
-		MsgSendTf.setBounds(10, 420, 415, 30);
-		SendBtn.setBounds(430, 420, 80, 30);
-		InfoP.setBounds(515, 5, 185, 150);
-		InfoP.setLayout(null);
+		contentScroll.setBounds(10, 5, 500, 410);
+		msgSendTf.setBounds(10, 420, 415, 30);
+		sendBtn.setBounds(430, 420, 80, 30);
+		infoP.setBounds(515, 5, 185, 150);
+		infoP.setLayout(null);
 		
 		
-		SideBarSplitP.setBounds(515, 5, 190, 445);
-		SideBarSplitP.setDividerLocation(150);
-		SideBarSplitP.setOneTouchExpandable(true);
+		sideBarSplitP.setBounds(515, 5, 190, 445);
+		sideBarSplitP.setDividerLocation(150);
+		sideBarSplitP.setOneTouchExpandable(true);
 		
-		add(SideBarSplitP);
-		add(ContentScroll);
-		add(MsgSendTf);
-		add(SendBtn);
+		add(sideBarSplitP);
+		add(contentScroll);
+		add(msgSendTf);
+		add(sendBtn);
 	}
 	
 	public void actionProcessor() {
 		System.out.println("hello?");
-		MsgSendTf.addActionListener(new ActionListener() {
+		msgSendTf.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("hello"+MsgSendTf.getText());
-				ContentTa.setText(MsgSendTf.getText());
+				System.out.println("hello"+msgSendTf.getText());
+				contentTa.setText(msgSendTf.getText());
 			}
 		});
-		SendBtn.addActionListener(new ActionListener() {
+		sendBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("hello"+MsgSendTf.getText());
-				ContentTa.setText(MsgSendTf.getText());
+				System.out.println("hello"+msgSendTf.getText());
+				contentTa.setText(msgSendTf.getText());
 			}
 		});
 	}
 
 	public void actionPerformed(ActionEvent e) {
 		System.out.println("hello");
-		/*if (e.getSource()==MsgSendTf || e.getSource()==SendBtn) {
-			ContentTa.setText(MsgSendTf.getText());
+		/*if (e.getSource()==msgSendTf || e.getSource()==sendBtn) {
+			contentTa.setText(msgSendTf.getText());
 			//send()
 		}*/
 	}

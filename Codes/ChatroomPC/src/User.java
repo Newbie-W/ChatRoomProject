@@ -1,41 +1,41 @@
 
 public class User {
-	private String Uname;
-	private String Pwd;
-	private String Sign;
-	private String Identity;
-	private String IP;
+	private String uname;
+	private String pwd;
+	private String sign;
+	private String identity;
+	private String ip;
 	User() {
 		
 	}
 	public String getUname() {
-		return Uname;
+		return uname;
 	}
 	public void setUname(String uname) {
-		Uname = uname;
+		uname = uname;
 	}
 	public String getPwd() {
-		return Pwd;
+		return pwd;
 	}
 	public void setPwd(String pwd) {
-		Pwd = pwd;
+		pwd = pwd;
 	}
 	public String getSign() {
-		return Sign;
+		return sign;
 	}
 	public void setSign(String sign) {
-		Sign = sign;
+		sign = sign;
 	}
 	public String getIdentity() {
-		return Identity;
+		return identity;
 	}
 	public void setIdentity(String identity) {
-		Identity = identity;
+		identity = identity;
 	}
 	public String getIP() {
-		return IP;
+		return ip;
 	}
 	public void setIP(String iP) {
-		IP = iP;
+		ip = iP;
 	}
 }

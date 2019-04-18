@@ -5,13 +5,13 @@ import javax.swing.*;
 import java.awt.event.*;
 
 public class WelcomeFrame extends JFrame implements ActionListener {
-	JPanel ChoiceP, ContentP;
-	JLabel WelcomeL;
-	ButtonGroup BGp;
-	JRadioButton ManB, UsrB;
-	Toolkit Kit;
-	Dimension ScreenSize;
-	User UserInfo;
+	JPanel choiceP, contentP;
+	JLabel welcomeL;
+	ButtonGroup bGp;
+	JRadioButton manB, usrB;
+	Toolkit kit;
+	Dimension screenSize;
+	User userInfo;
 	int x, y;
 	WelcomeFrame() {
 		initFrame();
@@ -25,45 +25,45 @@ public class WelcomeFrame extends JFrame implements ActionListener {
 		setSize(400,300);
 		setTitle("聊天室客户端");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		UserInfo = new User();
-		ChoiceP = new JPanel();
-		ContentP = new JPanel();
-		WelcomeL = new JLabel("<html><body><h3 color='blue'>WELCOME!<br>Please choose your identity to login!<br></h3></body></html>");
-		BGp = new ButtonGroup();
-		ManB = new JRadioButton("管理员");
-		UsrB = new JRadioButton("用户");
-		BGp.add(ManB);
-		BGp.add(UsrB);
-		Kit = Toolkit.getDefaultToolkit();
-		ScreenSize = Kit.getScreenSize();
-		x = (ScreenSize.width-getWidth())/2;
-		y = ScreenSize.height/2-getHeight()/2;
+		userInfo = new User();
+		choiceP = new JPanel();
+		contentP = new JPanel();
+		welcomeL = new JLabel("<html><body><h3 color='blue'>WELCOME!<br>Please choose your identity to login!<br></h3></body></html>");
+		bGp = new ButtonGroup();
+		manB = new JRadioButton("管理员");
+		usrB = new JRadioButton("用户");
+		bGp.add(manB);
+		bGp.add(usrB);
+		kit = Toolkit.getDefaultToolkit();
+		screenSize = kit.getScreenSize();
+		x = (screenSize.width-getWidth())/2;
+		y = screenSize.height/2-getHeight()/2;
 		setLocation(x, y);
 	}
 	
 	private void setFrameLook() {
-		ChoiceP.setLayout(new GridLayout(3,1));
-		ChoiceP.add(ManB);
-		ChoiceP.add(UsrB);
-		add(ChoiceP, BorderLayout.NORTH);
-		ContentP.add(WelcomeL);
-		add(ContentP, BorderLayout.CENTER);
+		choiceP.setLayout(new GridLayout(3,1));
+		choiceP.add(manB);
+		choiceP.add(usrB);
+		add(choiceP, BorderLayout.NORTH);
+		contentP.add(welcomeL);
+		add(contentP, BorderLayout.CENTER);
 	}
 	
 	private void actionProcessor() {
-		ManB.addActionListener(this);
-		UsrB.addActionListener(this);
+		manB.addActionListener(this);
+		usrB.addActionListener(this);
 	}
 	
 	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == ManB) {
+		if (e.getSource() == manB) {
 			this.setVisible(false);
-			UserInfo.setIdentity("管理员");
-			LoginFrame LoginF = new LoginFrame(UserInfo);
-		}else if (e.getSource() == UsrB) {
+			userInfo.setIdentity("管理员");
+			LoginFrame loginF = new LoginFrame(userInfo);
+		}else if (e.getSource() == usrB) {
 			this.setVisible(false);
-			UserInfo.setIdentity("用户");
-			LoginFrame LoginF = new LoginFrame(UserInfo);
+			userInfo.setIdentity("用户");
+			LoginFrame loginF = new LoginFrame(userInfo);
 		}
 	}
 }

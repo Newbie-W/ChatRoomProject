@@ -1,33 +1,33 @@
 import java.sql.*;
 
 public class DBCon {
-	private Connection Con;
-	private Statement Stmt;
+	private Connection con;
+	private Statement stmt;
 	private ResultSet rs;
 	DBCon() {
 		String JDriver = "com.hxtt.sql.access.AccessDriver";
-		String ConUrl = "jdbc:Access:///ChatroomDB.accdb";
+		String conUrl = "jdbc:Access:///ChatroomDB.accdb";
 		try {
 			Class.forName(JDriver);
-			Con = DriverManager.getConnection(ConUrl);
-			Stmt = Con.createStatement();
-			System.out.println("new "+Stmt);
+			con = DriverManager.getConnection(conUrl);
+			stmt = con.createStatement();
+			System.out.println("new "+stmt);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
 	public Statement getSt() {
-		return Stmt;
+		return stmt;
 	}
 	
 	public void getUpdate() {
 		
 	}
 	
-	public String getSelect(Statement Stmt, String temp) {
+	public String getSelect(Statement stmt, String temp) {
 		try {
-			rs = Stmt.executeQuery(temp);
+			rs = stmt.executeQuery(temp);
 			String s = new String();
 			String s1 ;//= new String()(不加此句，且不给其赋值，则报错描述为未初始化)
 			s1 = "";	//为何加了这一句才可以在return后判别登录失败？
@@ -61,8 +61,8 @@ public class DBCon {
 	public void closeSt() {
 		try {
 			rs.close();
-			Stmt.close();
-			Con.close();
+			stmt.close();
+			con.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

@@ -3,12 +3,12 @@ import java.awt.event.*;
 import javax.swing.*;
 
 public class UserMainFrame extends JFrame {
-	JPanel InfoP, FriendP, GroupP;
-	JTabbedPane ListTabbedPane;
-	JButton SettingBtn, SearchBtn, ExitBtn;
-	String Uname;
-	ImageIcon HeadImg;
-	JLabel HeadL, UnameL, SignL;
+	JPanel infoP, friendP, groupP;
+	JTabbedPane listTabbedPane;
+	JButton settingBtn, searchBtn, exitBtn;
+	String uname;
+	ImageIcon headImg;
+	JLabel headL, unameL, signL;
 	UserMainFrame(User user) {
 		initFrame();
 		setFrameLook();
@@ -21,45 +21,45 @@ public class UserMainFrame extends JFrame {
 		setTitle("列表");
 		setSize(280, 580);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		InfoP = new JPanel();
-		FriendP = new JPanel();
-		GroupP = new JPanel();
-		ListTabbedPane = new JTabbedPane();
-		SettingBtn = new JButton("设置");
-		SearchBtn = new JButton("查找");
-		ExitBtn = new JButton("退出");
-		Uname = "TestUsername";
-		HeadImg = new ImageIcon("1.jpg");
-		HeadL = new JLabel(HeadImg);
-		UnameL = new JLabel(Uname);
-		SignL = new JLabel("<html>个签Demo个签Demo个签Demo个签Demo个签Demo个签Demo个签Demo个签Demo个签Demo个签Demo个签Demo个签Demo</html>");
-		//SignL = new JLabel(User);
+		infoP = new JPanel();
+		friendP = new JPanel();
+		groupP = new JPanel();
+		listTabbedPane = new JTabbedPane();
+		settingBtn = new JButton("设置");
+		searchBtn = new JButton("查找");
+		exitBtn = new JButton("退出");
+		uname = "TestUsername";
+		headImg = new ImageIcon("1.jpg");
+		headL = new JLabel(headImg);
+		unameL = new JLabel(uname);
+		signL = new JLabel("<html>个签Demo个签Demo个签Demo个签Demo个签Demo个签Demo个签Demo个签Demo个签Demo个签Demo个签Demo个签Demo</html>");
+		//signL = new JLabel(User);
 	}
 	
 	public void setFrameLook() {
 		//setLayout(null);
-		//InfoP
-		InfoP.setLayout(null);
-		InfoP.setPreferredSize(new Dimension(250, 100));
-		HeadL.setBounds(5, 5, 70, 70);
-		HeadL.setBorder(BorderFactory.createLineBorder(Color.lightGray, 3));
-		UnameL.setBounds(90, 5, 100, 20);
-		SignL.setBounds(80, 25, 180, 75);	//10, 90, 240, 60
-		SignL.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
-		InfoP.add(HeadL);
-		InfoP.add(UnameL);
-		InfoP.add(SignL);
+		//infoP
+		infoP.setLayout(null);
+		infoP.setPreferredSize(new Dimension(250, 100));
+		headL.setBounds(5, 5, 70, 70);
+		headL.setBorder(BorderFactory.createLineBorder(Color.lightGray, 3));
+		unameL.setBounds(90, 5, 100, 20);
+		signL.setBounds(80, 25, 180, 75);	//10, 90, 240, 60
+		signL.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+		infoP.add(headL);
+		infoP.add(unameL);
+		infoP.add(signL);
 		
-		//ListTabbedPane
-		ListTabbedPane.addTab("好友", null, FriendP, "好友列表");
-		ListTabbedPane.addTab("群聊", null, GroupP, "群聊列表");
+		//listTabbedPane
+		listTabbedPane.addTab("好友", null, friendP, "好友列表");
+		listTabbedPane.addTab("群聊", null, groupP, "群聊列表");
 		
-		//FriendP
+		//friendP
 		
-		//GroupP
+		//groupP
 		
-		add(InfoP, BorderLayout.NORTH);
-		add(ListTabbedPane, BorderLayout.CENTER);
+		add(infoP, BorderLayout.NORTH);
+		add(listTabbedPane, BorderLayout.CENTER);
 	}
 	
 	public void actionProcessor() {

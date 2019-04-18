@@ -8,10 +8,10 @@ import java.net.Socket;
 import java.util.*;
 
 public class GroupChatroomFrame extends ChatFrame implements ActionListener {
-	JLabel PortL, IpL, NameL, HistoryMsgL;		//备用，HistoryMsg作为将来的聊天记录存放
-	JTextField PortTf, HostIpTf, NameTf;
-	JButton ConnectBtn, StopBtn;
-	Map<String, User> OnlineUsers;
+	JLabel portL, ipL, nameL, historyMsgL;		//备用，HistoryMsg作为将来的聊天记录存放
+	JTextField portTf, hostIpTf, nameTf;
+	JButton connectBtn, stopBtn;
+	Map<String, User> onlineUsers;
 	Socket socket;
 	PrintWriter writer;
 	boolean isConnected;
@@ -25,29 +25,29 @@ public class GroupChatroomFrame extends ChatFrame implements ActionListener {
 	
 	public void initFrame() {
 		super.initFrame();
-		PortL = new JLabel("端口");
-		IpL =new JLabel("服务器IP");
-		NameL = new JLabel("姓名");
-		PortTf = new JTextField("8888");
-		HostIpTf = new JTextField("127.0.0.1");
-		NameTf = new JTextField();
-		ConnectBtn =new JButton("连接");
-		StopBtn = new JButton("停止");
-		OnlineUsers = new HashMap<String, User>();
+		portL = new JLabel("端口");
+		ipL =new JLabel("服务器IP");
+		nameL = new JLabel("姓名");
+		portTf = new JTextField("8888");
+		hostIpTf = new JTextField("127.0.0.1");
+		nameTf = new JTextField();
+		connectBtn =new JButton("连接");
+		stopBtn = new JButton("停止");
+		onlineUsers = new HashMap<String, User>();
 		isConnected = false;
 	}
 	
 	public void setFrameLook() {
 		super.setFrameLook();
 		
-		PortL.setBounds(0, 0, 60, 30); PortTf.setBounds(65, 0, 120, 30);
-		IpL.setBounds(0, 35, 60, 30); HostIpTf.setBounds(65, 35, 120, 30);
-		NameL.setBounds(0, 70, 60, 30); NameTf.setBounds(65, 70, 120, 30);
-		ConnectBtn.setBounds(0, 105, 70, 30); StopBtn.setBounds(75, 105, 70, 30);
-		InfoP.add(PortL); InfoP.add(PortTf);
-		InfoP.add(IpL); InfoP.add(HostIpTf);
-		InfoP.add(NameL); InfoP.add(NameTf);
-		InfoP.add(ConnectBtn); InfoP.add(StopBtn);
+		portL.setBounds(0, 0, 60, 30); portTf.setBounds(65, 0, 120, 30);
+		ipL.setBounds(0, 35, 60, 30); hostIpTf.setBounds(65, 35, 120, 30);
+		nameL.setBounds(0, 70, 60, 30); nameTf.setBounds(65, 70, 120, 30);
+		connectBtn.setBounds(0, 105, 70, 30); stopBtn.setBounds(75, 105, 70, 30);
+		infoP.add(portL); infoP.add(portTf);
+		infoP.add(ipL); infoP.add(hostIpTf);
+		infoP.add(nameL); infoP.add(nameTf);
+		infoP.add(connectBtn); infoP.add(stopBtn);
 	}
 	
 	public void actionProcessor() {

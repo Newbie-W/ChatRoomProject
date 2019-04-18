@@ -5,10 +5,10 @@ import java.net.*;
 import javax.swing.*;
 
 public class ChatroomServer extends ChatFrame implements ActionListener {
-	JLabel PortL, MaxNumL;
-	JTextField PortTf, MaxNumTf;
-	JButton StartBtn, StopBtn;
-	ServerSocket SSocket;
+	JLabel portL, maxNumL;
+	JTextField portTf, maxNumTf;
+	JButton startBtn, stopBtn;
+	ServerSocket sSocket;
 	//ServerThread SThread;
 	//ArrayList<> Clients;
 	
@@ -20,57 +20,58 @@ public class ChatroomServer extends ChatFrame implements ActionListener {
 		//new GroupChatroomFrame();
 	}
 	
+	public void nitFrame() {
+		//super.initFrame();
+		portL = new JLabel("端口");
+		maxNumL = new JLabel("最大人数");
+		portTf = new JTextField("8888");
+		maxNumTf = new JTextField("30");
+		startBtn = new JButton("启动");
+		stopBtn = new JButton("停止");
+		//stopBtn.setEnabled(false);
+		
+	}
+	
+	public void etFrameLook() {
+		//super.setFrameLook();
+		portL.setBounds(0, 0, 60, 30); portTf.setBounds(65, 0, 120, 30);
+		maxNumL.setBounds(0, 35, 60, 30); maxNumTf.setBounds(65, 35, 120, 30);
+		startBtn.setBounds(0, 80, 70, 30); stopBtn.setBounds(75, 80, 70, 30);
+		super.infoP.add(portL); super.infoP.add(portTf);
+		super.infoP.add(maxNumL); super.infoP.add(maxNumTf);
+		super.infoP.add(startBtn); super.infoP.add(stopBtn);
+		
+		sideBarSplitP.setDividerLocation(120);
+	}
+	
+	public void ctionProcessor() {
+		//super.actionProcessor();
+		startBtn.addActionListener(this);
+		System.out.println("this is chatserver");
+	}
+	
 	ChatroomServer() {
-		initFrame();
-		setFrameLook();
+		nitFrame();
+		etFrameLook();
 		actionProcessor();
 		setVisible(true);
 		validate();
 	}
 	
-	public void initFrame() {
-		super.initFrame();
-		PortL = new JLabel("端口");
-		MaxNumL = new JLabel("最大人数");
-		PortTf = new JTextField("8888");
-		MaxNumTf = new JTextField("30");
-		StartBtn = new JButton("启动");
-		StopBtn = new JButton("停止");
-		//StopBtn.setEnabled(false);
-		
-	}
-	
-	public void setFrameLook() {
-		super.setFrameLook();
-		PortL.setBounds(0, 0, 60, 30); PortTf.setBounds(65, 0, 120, 30);
-		MaxNumL.setBounds(0, 35, 60, 30); MaxNumTf.setBounds(65, 35, 120, 30);
-		StartBtn.setBounds(0, 80, 70, 30); StopBtn.setBounds(75, 80, 70, 30);
-		InfoP.add(PortL); InfoP.add(PortTf);
-		InfoP.add(MaxNumL); InfoP.add(MaxNumTf);
-		InfoP.add(StartBtn); InfoP.add(StopBtn);
-		
-		SideBarSplitP.setDividerLocation(120);
-	}
-	
-	public void actionProcessor() {
-		super.actionProcessor();
-		StartBtn.addActionListener(this);
-		System.out.println("this is chatserver");
-	}
 	
 	public void actionPerformed(ActionEvent e) {
-		System.out.println("事件响应"+e.getActionCommand()+PortTf.getText());
-		if (e.getSource() == StartBtn) {
-			System.out.println("成功建立服务器Socket"+PortTf.getText());
+		System.out.println("事件响应"+e.getSource()+portTf.getText());
+		if (e.getSource() == startBtn) {
+			System.out.println("成功建立服务器Socket"+portTf.getText());
 			if (isStart) {
 				JOptionPane.showMessageDialog(this, "服务器已经启动", "错误", JOptionPane.ERROR_MESSAGE);
 				return;
 			}
-			int MaxNum;
-			int Port = Integer.parseInt(PortL.getText());
-			MaxNum = Integer.parseInt(MaxNumTf.getText());
+			int maxNum;
+			int port = Integer.parseInt(portL.getText());
+			maxNum = Integer.parseInt(maxNumTf.getText());
 			TestEnv();
-			serverStart(MaxNum, Port);
+			serverStart(maxNum, port);
 		}
 	}
 	
@@ -81,7 +82,7 @@ public class ChatroomServer extends ChatFrame implements ActionListener {
 	public void serverStart(int MaxNum, int Port) {
 		//Clients = new ArrayList<>();
 		try {
-			SSocket = new ServerSocket(Port);
+			sSocket = new ServerSocket(Port);
 			System.out.println("成功建立服务器Socket");
 			isStart = true;
 		} catch (BindException e) {
@@ -104,7 +105,7 @@ public class ChatroomServer extends ChatFrame implements ActionListener {
 		}
 		//if (Clients.size() == 0)
 		
-		String Message = MsgSendTf.getText();
+		String message = msgSendTf.getText();
 		//
 	}
 }
