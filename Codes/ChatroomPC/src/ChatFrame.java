@@ -15,19 +15,19 @@ public class ChatFrame extends JFrame implements ActionListener {
 	JScrollPane contentScroll, userListScroll;
 	JSplitPane sideBarSplitP;
 	ChatFrame() {
-		initFrame();
+		/*initFrame();
 		setFrameLook();
 		actionProcessor();
 		setVisible(true);
-		validate();
+		validate();*/
 	}
 	
 	public void initFrame() {
 		setSize(720, 495);
-		setTitle("х╨ад");
+		//setTitle("х╨ад");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		infoP = new JPanel();
-		msgSendTf = new JTextField("11");
+		msgSendTf = new JTextField();
 		contentTa = new JTextArea();
 		contentTa.setEditable(false);
 		contentTa.setForeground(Color.BLUE);
@@ -64,17 +64,14 @@ public class ChatFrame extends JFrame implements ActionListener {
 	}
 	
 	public void actionProcessor() {
-		System.out.println("hello?");
 		msgSendTf.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("hello"+msgSendTf.getText());
-				contentTa.setText(msgSendTf.getText());
+				contentTa.append(msgSendTf.getText()+"\n");
 			}
 		});
 		sendBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("hello"+msgSendTf.getText());
-				contentTa.setText(msgSendTf.getText());
+				contentTa.append(msgSendTf.getText()+"\n");
 			}
 		});
 	}
