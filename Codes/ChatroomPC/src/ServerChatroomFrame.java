@@ -1,15 +1,19 @@
 import java.awt.*;
 import java.awt.event.*;
-import java.io.IOException;
+import java.io.*;
 import java.net.*;
+
 import javax.swing.*;
 
-/*注意之后完善输入内容不能为空*/
+/*注意之后完善输入内容不能为空；
+ * 还有maxNum、port只能为正整数（不是负的、0、字符串）
+ * */
 public class ServerChatroomFrame extends ChatFrame implements ActionListener {
 	JLabel portL, maxNumL;
 	JTextField portTf, maxNumTf;
 	JButton startBtn, stopBtn;
 	ServerSocket sSocket;
+	Socket cSocket;
 	//ServerThread SThread;
 	//ArrayList<> Clients;
 	
@@ -55,6 +59,15 @@ public class ServerChatroomFrame extends ChatFrame implements ActionListener {
 	public void actionProcessor() {
 		super.actionProcessor();
 		startBtn.addActionListener(this);
+		stopBtn.addActionListener(this);
+		this.addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent e) {
+				if (isStart) {
+					serverClose();
+				}
+				System.exit(0);
+			}
+		});
 	}
 	
 	public void actionPerformed(ActionEvent e) {
@@ -66,8 +79,24 @@ public class ServerChatroomFrame extends ChatFrame implements ActionListener {
 			int maxNum;
 			int port = Integer.parseInt(portTf.getText());
 			maxNum = Integer.parseInt(maxNumTf.getText());
-			TestEnv();
+			//TestEnv();
 			serverStart(maxNum, port);
+			if (isStart) {			/*防止sSocket建立异常，还执行后续操作*/
+				startBtn.setEnabled(false);
+				maxNumTf.setEditable(false);
+				portTf.setEditable(false);
+				stopBtn.setEnabled(true);
+			}
+		} else if (e.getSource() == stopBtn) {
+			if (!isStart) {
+				JOptionPane.showMessageDialog(this, "服务器尚未启动", "错误", JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+			serverClose();
+			stopBtn.setEnabled(false);
+			startBtn.setEnabled(true);
+			maxNumTf.setEditable(true);
+			portTf.setEditable(true);
 		}
 	}
 	
@@ -75,23 +104,42 @@ public class ServerChatroomFrame extends ChatFrame implements ActionListener {
 		
 	}
 	
-	public void serverStart(int MaxNum, int Port) {
+	public void serverStart(int maxNum, int port) {
 		//Clients = new ArrayList<>();
 		try {
-			sSocket = new ServerSocket(Port);
-			System.out.println("成功建立服务器Socket");
+			sSocket = new ServerSocket(port);
+			JOptionPane.showMessageDialog(this, "成功建立服务器ServerSocket");
+			serverService();
 			isStart = true;
 		} catch (BindException e) {
 			isStart = false;
+			JOptionPane.showMessageDialog(this, "端口号已被占用，请更改");
+			System.out.println(e.getMessage());
 		} catch (Exception e) {
 			isStart = false;
+			System.out.println(e.getMessage());
 			e.printStackTrace();
 		}
 	}
 	
+	public void serverService() {
+		while (true) {
+			try {
+				cSocket = sSocket.accept();
+				BufferedReader reader = new BufferedReader(new InputStreamReader(cSocket.getInputStream()));
+				PrintWriter writer = new PrintWriter(cSocket.getOutputStream());
+			} catch (IOException e) {
+				System.out.println(e.getMessage());
+				e.printStackTrace();
+			}
+		}
+	}
+	
 	public void serverClose() {
-		//if ()
+		//if (isStart)
 		
+		JOptionPane.showMessageDialog(this, "成功关闭服务器ServerSocket");
+		isStart = false;
 	}
 	
 	public void sendMessage() {
