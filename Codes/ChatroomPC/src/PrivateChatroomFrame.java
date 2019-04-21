@@ -13,6 +13,10 @@ public class PrivateChatroomFrame extends ChatFrame {
 		actionProcessor();
 		setVisible(true);
 		validate();
-		System.out.println("OK");
+	}
+	
+	public void initFrame() {
+		super.initFrame();
+		setDefaultCloseOperation(HIDE_ON_CLOSE);
 	}
 }

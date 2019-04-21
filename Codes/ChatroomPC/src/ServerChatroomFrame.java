@@ -14,6 +14,8 @@ public class ServerChatroomFrame extends ChatFrame implements ActionListener {
 	JButton startBtn, stopBtn;
 	ServerSocket sSocket;
 	Socket cSocket;
+	DataInputStream in;
+	DataOutputStream out;
 	//ServerThread SThread;
 	//ArrayList<> Clients;
 	
@@ -68,6 +70,20 @@ public class ServerChatroomFrame extends ChatFrame implements ActionListener {
 				System.exit(0);
 			}
 		});
+		msgSendTf.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//contentTa.append(msgSendTf.getText()+"\n");
+				try {
+					System.out.println("服务器我："+msgSendTf.getText());
+					out.writeUTF(msgSendTf.getText()+"\n");
+				} catch (IOException e1) {
+					System.out.println(e1.getMessage());
+					e1.printStackTrace();
+				}
+				msgSendTf.setText("");
+				
+			}
+		});
 	}
 	
 	public void actionPerformed(ActionEvent e) {
@@ -92,7 +108,7 @@ public class ServerChatroomFrame extends ChatFrame implements ActionListener {
 				JOptionPane.showMessageDialog(this, "服务器尚未启动", "错误", JOptionPane.ERROR_MESSAGE);
 				return;
 			}
-			serverClose();
+			//serverClose();
 			stopBtn.setEnabled(false);
 			startBtn.setEnabled(true);
 			maxNumTf.setEditable(true);
@@ -114,7 +130,7 @@ public class ServerChatroomFrame extends ChatFrame implements ActionListener {
 			portTf.setEditable(false);
 			stopBtn.setEnabled(true);
 			//JOptionPane.showMessageDialog(this, "成功建立服务器ServerSocket");
-			//serverService();
+			serverService();
 			isStart = true;
 		} catch (BindException e) {
 			isStart = false;
@@ -131,8 +147,25 @@ public class ServerChatroomFrame extends ChatFrame implements ActionListener {
 		//while (true) {
 			try {
 				cSocket = sSocket.accept();
-				BufferedReader reader = new BufferedReader(new InputStreamReader(cSocket.getInputStream()));
+				in = new DataInputStream(cSocket.getInputStream());
+				out = new DataOutputStream(cSocket.getOutputStream());
+				/*BufferedReader reader = new BufferedReader(new InputStreamReader(cSocket.getInputStream()));
 				PrintWriter writer = new PrintWriter(cSocket.getOutputStream());
+				String message = reader.readLine();
+				writer.println(message);  
+		        writer.flush();*/
+				out.writeUTF("你好:我是服务器,连接成功。");
+				String s;
+				//int i=0;
+				while (true) {
+					s = in.readUTF();
+					System.out.println("收到客户端的一条消息"+s+",end?"+"end\n".equals(s));
+					contentTa.append(s);
+					out.writeUTF("我是服务器，我已收到");
+					//if (s!=null) break;
+					if ("end\n".equals(s)||"end".equals(s)){out.writeUTF("end");contentTa.append("关闭");break;}
+				}
+				//out.writeUTF("你好:我是服务器,连接成功。");
 			} catch (IOException e) {
 				System.out.println(e.getMessage());
 				e.printStackTrace();

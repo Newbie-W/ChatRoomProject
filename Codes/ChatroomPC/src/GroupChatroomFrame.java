@@ -5,6 +5,7 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.io.*;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.*;
 
 public class GroupChatroomFrame extends ChatFrame implements ActionListener {
@@ -15,7 +16,11 @@ public class GroupChatroomFrame extends ChatFrame implements ActionListener {
 	JList userList;
 	Map<String, User> onlineUsers;
 	Socket socket;
-	PrintWriter writer;
+	String s=null;
+	//PrintWriter writer;
+	//BufferedReader reader;
+	DataInputStream in ;
+	DataOutputStream out ;
 	boolean isConnected;
 	GroupChatroomFrame() {
 		initFrame();
@@ -27,6 +32,7 @@ public class GroupChatroomFrame extends ChatFrame implements ActionListener {
 	
 	public void initFrame() {
 		super.initFrame();
+		setDefaultCloseOperation(HIDE_ON_CLOSE);
 		portL = new JLabel("端口");
 		ipL =new JLabel("服务器IP");
 		nameL = new JLabel("姓名");
@@ -56,9 +62,69 @@ public class GroupChatroomFrame extends ChatFrame implements ActionListener {
 	
 	public void actionProcessor() {
 		super.actionProcessor();
+		connectBtn.addActionListener(this);
+		msgSendTf.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//contentTa.append(msgSendTf.getText()+"\n");
+				System.out.println("我："+msgSendTf.getText());
+				try {
+					out.writeUTF(msgSendTf.getText()+"\n");
+				} catch (IOException e1) {
+					System.out.println(e1.getMessage());
+					e1.printStackTrace();
+				}
+				msgSendTf.setText("");
+				
+			}
+		});
+		sendBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				contentTa.append(msgSendTf.getText()+"\n");
+				msgSendTf.setText("");
+			}
+		});
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		
+		if (e.getSource() == connectBtn) {
+			try {
+				//socket = new Socket(hostIpTf.getText(), Integer.parseInt(portTf.getText()));
+				socket = new Socket("127.0.0.1", 8888);
+				System.out.println("成功建立连接 "+socket.getLocalPort());
+				//DataInputStream in = new DataInputStream(cSocket.getInputStream());
+				//DataOutputStream out = new DataOutputStream(cSocket.getOutputStream());
+				in = new DataInputStream(socket.getInputStream());
+				out = new DataOutputStream(socket.getOutputStream());
+			/*} catch (NumberFormatException e2) {
+				e2.printStackTrace();
+			} catch (UnknownHostException e2) {
+				e2.printStackTrace();
+			} catch (IOException e2) {
+				e2.printStackTrace();
+			}
+			try {*/
+				//int i=0;
+				while (true) {
+					s = in.readUTF();
+					System.out.println("hi"+s);
+					if (s!=null) break;
+					System.out.println("来自服务器的消息"+s);
+					if ("end\n".equals(s)||"end".equals(s)){contentTa.append("关闭");break;}
+					out.writeUTF("客户端:已收到");
+				}
+				out.writeUTF("你好:我是客户端,连接成功。");
+				//out.writeUTF(msgSendTf.getText());
+				contentTa.append(s);
+				/*writer = new PrintWriter(socket.getOutputStream());
+				reader = new BufferedReader(new InputStreamReader(socket.getInputStream())); 
+				String message = reader.readLine();
+				writer.println(message);  
+		        writer.flush();*/
+			} catch (Exception e1) {
+				System.out.println(e1.getMessage());
+				e1.printStackTrace();
+			}  
+             
+		}
 	}
 }

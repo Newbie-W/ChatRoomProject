@@ -5,11 +5,11 @@ import java.sql.SQLException;
 
 import javax.swing.*;
 
-public class UserMainFrame extends JFrame {
+public class UserMainFrame extends JFrame implements ActionListener {
 	JPanel infoP, groupP;
 	FriendPanel  friendP;
 	JTabbedPane listTabbedPane;
-	JButton settingBtn, searchBtn, exitBtn;
+	JButton settingBtn, searchBtn, exitBtn, groupChatBtn;
 	String uname;
 	ImageIcon headImg;
 	JLabel headL, unameL, signL;
@@ -29,7 +29,7 @@ public class UserMainFrame extends JFrame {
 		friendP = new FriendPanel();
 		groupP = new JPanel();
 		listTabbedPane = new JTabbedPane();
-		
+		groupChatBtn = new JButton("启动群聊");
 		//settingBtn = new JButton("设置");
 		//searchBtn = new JButton("查找");
 		//exitBtn = new JButton("退出");
@@ -60,13 +60,19 @@ public class UserMainFrame extends JFrame {
 		listTabbedPane.addTab("群聊", null, groupP, "群聊列表");
 		
 		//groupP
-		
+		groupP.add(groupChatBtn);
 		
 		add(infoP, BorderLayout.NORTH);
 		add(listTabbedPane, BorderLayout.CENTER);
 	}
 	
 	public void actionProcessor() {
-		
+		groupChatBtn.addActionListener(this);
+	}
+
+	public void actionPerformed(ActionEvent e) {
+		if (e.getSource() == groupChatBtn) {
+			new GroupChatroomFrame();
+		}
 	}
 }
