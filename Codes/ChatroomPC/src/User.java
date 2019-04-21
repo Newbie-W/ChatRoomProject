@@ -8,6 +8,10 @@ public class User {
 	User() {
 		
 	}
+	User(String uname, String pwd) {
+		this.uname = uname;
+		this.pwd = pwd;
+	}
 	public String getUname() {
 		return uname;
 	}

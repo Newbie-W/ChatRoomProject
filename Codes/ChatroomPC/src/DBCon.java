@@ -43,7 +43,9 @@ public class DBCon {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return null;
-		}
+		} /*finally {
+			closeSt();
+		}*/
 	}
 	
 	public String getInfo(Statement Stmt, String temp) {

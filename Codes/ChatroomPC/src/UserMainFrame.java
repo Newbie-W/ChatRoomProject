@@ -1,9 +1,13 @@
 import java.awt.*;
 import java.awt.event.*;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 import javax.swing.*;
 
 public class UserMainFrame extends JFrame {
-	JPanel infoP, friendP, groupP;
+	JPanel infoP, groupP;
+	FriendPanel  friendP;
 	JTabbedPane listTabbedPane;
 	JButton settingBtn, searchBtn, exitBtn;
 	String uname;
@@ -22,12 +26,13 @@ public class UserMainFrame extends JFrame {
 		setSize(280, 580);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		infoP = new JPanel();
-		friendP = new JPanel();
+		friendP = new FriendPanel();
 		groupP = new JPanel();
 		listTabbedPane = new JTabbedPane();
-		settingBtn = new JButton("设置");
-		searchBtn = new JButton("查找");
-		exitBtn = new JButton("退出");
+		
+		//settingBtn = new JButton("设置");
+		//searchBtn = new JButton("查找");
+		//exitBtn = new JButton("退出");
 		uname = "TestUsername";
 		headImg = new ImageIcon("1.jpg");
 		headL = new JLabel(headImg);
@@ -54,9 +59,8 @@ public class UserMainFrame extends JFrame {
 		listTabbedPane.addTab("好友", null, friendP, "好友列表");
 		listTabbedPane.addTab("群聊", null, groupP, "群聊列表");
 		
-		//friendP
-		
 		//groupP
+		
 		
 		add(infoP, BorderLayout.NORTH);
 		add(listTabbedPane, BorderLayout.CENTER);

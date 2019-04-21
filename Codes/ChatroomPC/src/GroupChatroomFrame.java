@@ -11,6 +11,8 @@ public class GroupChatroomFrame extends ChatFrame implements ActionListener {
 	JLabel portL, ipL, nameL, historyMsgL;		//备用，HistoryMsg作为将来的聊天记录存放
 	JTextField portTf, hostIpTf, nameTf;
 	JButton connectBtn, stopBtn;
+	DefaultListModel listModel;
+	JList userList;
 	Map<String, User> onlineUsers;
 	Socket socket;
 	PrintWriter writer;
@@ -33,6 +35,8 @@ public class GroupChatroomFrame extends ChatFrame implements ActionListener {
 		nameTf = new JTextField();
 		connectBtn =new JButton("连接");
 		stopBtn = new JButton("停止");
+		listModel = super.listModel;
+		userList = super.userList;
 		onlineUsers = new HashMap<String, User>();
 		isConnected = false;
 	}

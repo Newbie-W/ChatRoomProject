@@ -108,8 +108,13 @@ public class ServerChatroomFrame extends ChatFrame implements ActionListener {
 		//Clients = new ArrayList<>();
 		try {
 			sSocket = new ServerSocket(port);
-			JOptionPane.showMessageDialog(this, "成功建立服务器ServerSocket");
-			serverService();
+			//JOptionPane.showMessageDialog(this, "成功建立服务器ServerSocket");//后续加上accept阻塞，本句放前面，后面内容则无效??setVisible也不行，放后面则可以
+			startBtn.setEnabled(false);
+			maxNumTf.setEditable(false);
+			portTf.setEditable(false);
+			stopBtn.setEnabled(true);
+			//JOptionPane.showMessageDialog(this, "成功建立服务器ServerSocket");
+			//serverService();
 			isStart = true;
 		} catch (BindException e) {
 			isStart = false;
@@ -123,7 +128,7 @@ public class ServerChatroomFrame extends ChatFrame implements ActionListener {
 	}
 	
 	public void serverService() {
-		while (true) {
+		//while (true) {
 			try {
 				cSocket = sSocket.accept();
 				BufferedReader reader = new BufferedReader(new InputStreamReader(cSocket.getInputStream()));
@@ -132,7 +137,7 @@ public class ServerChatroomFrame extends ChatFrame implements ActionListener {
 				System.out.println(e.getMessage());
 				e.printStackTrace();
 			}
-		}
+		//}
 	}
 	
 	public void serverClose() {

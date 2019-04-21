@@ -136,10 +136,14 @@ public class LoginFrame extends JFrame implements ActionListener, MouseListener,
 			if (con == null) con = new DBCon();		//我加这句if是否必要呢？
 			String temp = "select * from UserInfo where 用户名 = '"+uname+"' and 密码='"+pwd+"'";
 			System.out.println(temp+" , "+con.getSelect(con.getSt(), temp));
-			if (con.getSelect(con.getSt(), temp) == "") {
+			if (con.getSelect(con.getSt(), temp).equals("")) {
 				JOptionPane.showMessageDialog(null, "登录失败");
+				con.closeSt();
 			}else {
 				JOptionPane.showMessageDialog(null, "登录成功");
+				con.closeSt();
+				this.setVisible(false);
+				new UserMainFrame(new User(uname, pwd));
 			}
 		}
 	}
