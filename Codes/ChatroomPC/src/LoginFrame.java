@@ -133,12 +133,19 @@ public class LoginFrame extends JFrame implements ActionListener, MouseListener,
 		} else  if (e.getSource() == loginBtn) {
 			String uname = unameTf.getText();
 			String pwd = new String(pwdF.getPassword());
-			if (con == null) con = new DBCon();		//我加这句if是否必要呢？
-			String temp = "select * from UserInfo where 用户名 = '"+uname+"' and 密码='"+pwd+"'";
+			String temp;
+			if (con == null || !con.isConStart()) 		//有可能con被关闭了，但对象还存在，所以还要判断状态
+				con = new DBCon();
+			//System.out.println(pwd+",pwd==null?"+ (pwd == null)+","+("".equals(pwd.trim())) );
+			if (pwd == null || "".equals(pwd.trim())) {
+				temp = "select * from UserInfo where 用户名 = '"+uname.trim()+"' and 密码 is null";
+			} else {
+				temp = "select * from UserInfo where 用户名 = '"+uname.trim()+"' and 密码='"+pwd.trim()+"'";
+			}
 			System.out.println(temp+" , "+con.getSelect(con.getSt(), temp));
 			if (con.getSelect(con.getSt(), temp).equals("")) {
 				JOptionPane.showMessageDialog(null, "登录失败");
-				con.closeSt();
+				//con.closeSt();	登录失败需要重新输入账号登录，不能在此就关闭
 			}else {
 				JOptionPane.showMessageDialog(null, "登录成功");
 				con.closeSt();

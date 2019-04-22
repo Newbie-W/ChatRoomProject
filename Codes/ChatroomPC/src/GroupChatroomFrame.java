@@ -85,6 +85,16 @@ public class GroupChatroomFrame extends ChatFrame implements ActionListener {
 		});
 	}
 
+	public void closeConnect() {
+		try {
+			out.close();
+			in.close();
+			socket.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == connectBtn) {
 			try {
@@ -125,6 +135,8 @@ public class GroupChatroomFrame extends ChatFrame implements ActionListener {
 				e1.printStackTrace();
 			}  
              
+		} else if (e.getSource() == stopBtn) {
+			closeConnect();
 		}
 	}
 }

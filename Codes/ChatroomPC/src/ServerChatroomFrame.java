@@ -1,9 +1,19 @@
-import java.awt.*;
-import java.awt.event.*;
-import java.io.*;
-import java.net.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.BindException;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.*;
 
-import javax.swing.*;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 
 /*注意之后完善输入内容不能为空；
  * 还有maxNum、port只能为正整数（不是负的、0、字符串）
@@ -108,7 +118,7 @@ public class ServerChatroomFrame extends ChatFrame implements ActionListener {
 				JOptionPane.showMessageDialog(this, "服务器尚未启动", "错误", JOptionPane.ERROR_MESSAGE);
 				return;
 			}
-			//serverClose();
+			serverClose();
 			stopBtn.setEnabled(false);
 			startBtn.setEnabled(true);
 			maxNumTf.setEditable(true);
@@ -120,10 +130,21 @@ public class ServerChatroomFrame extends ChatFrame implements ActionListener {
 		
 	}
 	
-	public void serverStart(int maxNum, int port) {
+	public void serverStart(int maxNum, final int  port) {
 		//Clients = new ArrayList<>();
 		try {
-			sSocket = new ServerSocket(port);
+			new Thread(new Runnable() {
+				public void run() {
+					try {
+						sSocket = new ServerSocket(port);
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+				
+				
+			}).start() ;
+			
 			//JOptionPane.showMessageDialog(this, "成功建立服务器ServerSocket");//后续加上accept阻塞，本句放前面，后面内容则无效??setVisible也不行，放后面则可以
 			startBtn.setEnabled(false);
 			maxNumTf.setEditable(false);
@@ -132,11 +153,7 @@ public class ServerChatroomFrame extends ChatFrame implements ActionListener {
 			//JOptionPane.showMessageDialog(this, "成功建立服务器ServerSocket");
 			serverService();
 			isStart = true;
-		} catch (BindException e) {
-			isStart = false;
-			JOptionPane.showMessageDialog(this, "端口号已被占用，请更改");
-			System.out.println(e.getMessage());
-		} catch (Exception e) {
+		}  catch (Exception e) {
 			isStart = false;
 			System.out.println(e.getMessage());
 			e.printStackTrace();
@@ -173,10 +190,22 @@ public class ServerChatroomFrame extends ChatFrame implements ActionListener {
 		//}
 	}
 	
+	public void closeConnect() {
+		try {
+			out.close();
+			in.close();
+			cSocket.close();
+			sSocket.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public void serverClose() {
 		//if (isStart)
 		
 		JOptionPane.showMessageDialog(this, "成功关闭服务器ServerSocket");
+		closeConnect();
 		isStart = false;
 	}
 	

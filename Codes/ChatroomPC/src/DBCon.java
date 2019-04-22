@@ -4,6 +4,7 @@ public class DBCon {
 	private Connection con;
 	private Statement stmt;
 	private ResultSet rs;
+	private boolean isStart = false;
 	DBCon() {
 		String JDriver = "com.hxtt.sql.access.AccessDriver";
 		String conUrl = "jdbc:Access:///ChatroomDB.accdb";
@@ -11,7 +12,8 @@ public class DBCon {
 			Class.forName(JDriver);
 			con = DriverManager.getConnection(conUrl);
 			stmt = con.createStatement();
-			System.out.println("new "+stmt);
+			isStart = true;
+			//System.out.println("new "+stmt);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -19,6 +21,10 @@ public class DBCon {
 	
 	public Statement getSt() {
 		return stmt;
+	}
+	
+	public boolean isConStart() {
+		return isStart;
 	}
 	
 	public void getUpdate() {
@@ -29,9 +35,11 @@ public class DBCon {
 		try {
 			rs = stmt.executeQuery(temp);
 			String s = new String();
-			String s1 ;//= new String()(不加此句，且不给其赋值，则报错描述为未初始化)
-			s1 = "";	//为何加了这一句才可以在return后判别登录失败？
+			String s1 ;
+			s1 = "";
+			//System.out.println("==== " + s1 + "  ====");
 			while (rs.next()) {
+				//System.out.println("++++");
 				for (int i=1; i<3; i++) {
 					s = rs.getString(i) + "\t";
 					s1 += s;
@@ -39,6 +47,7 @@ public class DBCon {
 				s = rs.getString(3) + "\n";
 				s1 += s;
 			}
+			//System.out.println("----- " + s1 + " ----");
 			return s1;
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -65,6 +74,7 @@ public class DBCon {
 			rs.close();
 			stmt.close();
 			con.close();
+			isStart = false;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
