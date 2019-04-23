@@ -68,7 +68,8 @@ public class GroupChatroomFrame extends ChatFrame implements ActionListener {
 				//contentTa.append(msgSendTf.getText()+"\n");
 				System.out.println("我："+msgSendTf.getText());
 				try {
-					out.writeUTF(msgSendTf.getText()+"\n");
+					contentTa.append(msgSendTf.getText());//+"\n"
+					out.writeUTF(msgSendTf.getText());
 				} catch (IOException e1) {
 					System.out.println(e1.getMessage());
 					e1.printStackTrace();
@@ -99,12 +100,11 @@ public class GroupChatroomFrame extends ChatFrame implements ActionListener {
 		new Thread(new Runnable() {
 			public void run() {
 				try {
-					socket = new Socket(hostIpTf.getText(), Integer.parseInt(portTf.getText()));
+					socket = new Socket(hostIpTf.getText(), Integer.parseInt(portTf.getText()));//socket = new Socket("127.0.0.1", 8888);
 				} catch (Exception e1) {
 					System.out.println(e1.getMessage());
 					e1.printStackTrace();
 				}
-				//socket = new Socket("127.0.0.1", 8888);
 				System.out.println("成功建立连接S，你是C，端口号"+socket.getLocalPort());
 				try {
 					
@@ -119,17 +119,24 @@ public class GroupChatroomFrame extends ChatFrame implements ActionListener {
 					}
 					try {*/
 					//int i=0;
+					out.writeUTF("你好:我是客户端,连接成功。");
 					while (true) {
 						s = in.readUTF();
-						System.out.println("hi"+s);
-						if (s!=null) break;
-						System.out.println("来自服务器的消息"+s);
-						if ("end\n".equals(s)||"end".equals(s)){contentTa.append("关闭");break;}
-						out.writeUTF("客户端:已收到");
+						if (s!=null) contentTa.append(s+"\n");
+						//System.out.println("hi"+s);
+						//if (s!=null) break;
+						//System.out.println("来自服务器的消息"+s);
+						if ("end\n".equals(s)||"end".equals(s)) {
+							contentTa.append("关闭\n");
+							break;
+						}
+						
 					}
-					out.writeUTF("你好:我是客户端,连接成功。");
+					//contentTa.append(s);
+					out.writeUTF("客户端:已收到");
+					//
 					//out.writeUTF(msgSendTf.getText());
-					contentTa.append(s);
+					//contentTa.append(s);
 					/*writer = new PrintWriter(socket.getOutputStream());
 					reader = new BufferedReader(new InputStreamReader(socket.getInputStream())); 
 					String message = reader.readLine();
