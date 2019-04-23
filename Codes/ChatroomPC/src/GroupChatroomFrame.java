@@ -19,8 +19,8 @@ public class GroupChatroomFrame extends ChatFrame implements ActionListener {
 	String s=null;
 	//PrintWriter writer;
 	//BufferedReader reader;
-	DataInputStream in ;
-	DataOutputStream out ;
+	DataInputStream in;
+	DataOutputStream out;
 	boolean isConnected;
 	GroupChatroomFrame() {
 		initFrame();
@@ -32,6 +32,7 @@ public class GroupChatroomFrame extends ChatFrame implements ActionListener {
 	
 	public void initFrame() {
 		super.initFrame();
+		setTitle("群聊");
 		setDefaultCloseOperation(HIDE_ON_CLOSE);
 		portL = new JLabel("端口");
 		ipL =new JLabel("服务器IP");
@@ -96,7 +97,7 @@ public class GroupChatroomFrame extends ChatFrame implements ActionListener {
 		}
 	}
 	
-	public void connectStart() {
+	public void startConnect() {
 		new Thread(new Runnable() {
 			public void run() {
 				try {
@@ -152,7 +153,7 @@ public class GroupChatroomFrame extends ChatFrame implements ActionListener {
 	
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == connectBtn) {
-			connectStart();
+			startConnect();
              
 		} else if (e.getSource() == stopBtn) {
 			closeConnect();
