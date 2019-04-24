@@ -4,7 +4,7 @@ import javax.swing.*;
 
 import java.awt.event.*;
 
-public class LoginFrame extends JFrame implements ActionListener, MouseListener,MouseMotionListener {
+public class UserLoginFrame extends JFrame implements ActionListener, MouseListener,MouseMotionListener {
 	JPanel ctrlBtnP, picP, inputP, loginBtnP;//
 	ImageIcon img, headImg;	//, LogoImg
 	JLabel bgL, headL, registerL, forgetPwdL, unameL, pwdL, titleL;	//, LogoL
@@ -15,7 +15,7 @@ public class LoginFrame extends JFrame implements ActionListener, MouseListener,
 	Dimension screenSize;
 	int x, y, startX, startY, endX, endY;
 	DBCon con; 
-	LoginFrame(User UserInfo) {
+	UserLoginFrame(User UserInfo) {
 		System.out.println(UserInfo.getIdentity());
 		initFrame();
 		setFrameLook();
@@ -56,8 +56,8 @@ public class LoginFrame extends JFrame implements ActionListener, MouseListener,
 		loginBtn = new JButton("µÇÂ¼");
 		kit = Toolkit.getDefaultToolkit();
 		screenSize = kit.getScreenSize();
-		x = (screenSize.width-getWidth())/2;
-		y = screenSize.height/2-getHeight()/2;
+		x = (screenSize.width-getWidth()) / 2;
+		y = screenSize.height/2 - getHeight()/2;
 		setLocation(x, y);
 	}
 	

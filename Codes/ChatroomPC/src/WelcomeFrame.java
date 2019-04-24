@@ -59,11 +59,12 @@ public class WelcomeFrame extends JFrame implements ActionListener {
 		if (e.getSource() == manB) {
 			this.setVisible(false);
 			userInfo.setIdentity("管理员");
-			LoginFrame loginF = new LoginFrame(userInfo);
+			ManagerLoginFrame loginF = new ManagerLoginFrame();
+			//UserLoginFrame loginF = new UserLoginFrame(userInfo);
 		}else if (e.getSource() == usrB) {
 			this.setVisible(false);
 			userInfo.setIdentity("用户");
-			LoginFrame loginF = new LoginFrame(userInfo);
+			UserLoginFrame loginF = new UserLoginFrame(userInfo);
 		}
 	}
 }
