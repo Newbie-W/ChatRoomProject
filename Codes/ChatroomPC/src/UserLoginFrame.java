@@ -1,7 +1,5 @@
 import java.awt.*;
-
 import javax.swing.*;
-
 import java.awt.event.*;
 
 public class UserLoginFrame extends JFrame implements ActionListener, MouseListener,MouseMotionListener {
@@ -138,14 +136,14 @@ public class UserLoginFrame extends JFrame implements ActionListener, MouseListe
 				con = new DBCon();
 			//System.out.println(pwd+",pwd==null?"+ (pwd == null)+","+("".equals(pwd.trim())) );
 			if (pwd == null || "".equals(pwd.trim())) {
-				temp = "select * from UserInfo where 用户名 = '"+uname.trim()+"' and 密码 is null";
+				temp = "select * from UserInfo where 身份='用户' and 用户名 = '"+uname.trim()+"' and 密码 is null";
 			} else {
-				temp = "select * from UserInfo where 用户名 = '"+uname.trim()+"' and 密码='"+pwd.trim()+"'";
+				temp = "select * from UserInfo where 身份='用户' and 用户名 = '"+uname.trim()+"' and 密码='"+pwd.trim()+"'";
 			}
 			System.out.println(temp+" , "+con.getSelect(con.getSt(), temp));
 			if (con.getSelect(con.getSt(), temp).equals("")) {
 				JOptionPane.showMessageDialog(null, "登录失败");
-				//con.closeSt();	登录失败需要重新输入账号登录，不能在此就关闭
+				con.closeSt();
 			}else {
 				JOptionPane.showMessageDialog(null, "登录成功");
 				con.closeSt();

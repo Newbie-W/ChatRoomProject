@@ -1,7 +1,7 @@
 import java.awt.*;
 import java.awt.event.*;
-
 import javax.swing.*;
+
 public class ManagerLoginFrame extends JFrame implements ActionListener {
 	JPanel inputP, loginBtnP;
 	ImageIcon bgImg;
@@ -81,9 +81,9 @@ public class ManagerLoginFrame extends JFrame implements ActionListener {
 				con = new DBCon();
 			}
 			if (pwd == null || "".equals(pwd.trim())) {
-				temp = "select * from UserInfo where 用户名 = '"+uname.trim()+"' and 密码 is null";
+				temp = "select * from UserInfo where 身份='管理员' and 用户名 = '"+uname.trim()+"' and 密码 is null";
 			} else {
-				temp = "select * from UserInfo where 用户名 = '"+uname.trim()+"' and 密码='"+pwd.trim()+"'";
+				temp = "select * from UserInfo where 用户名 = '"+uname.trim()+"' and 密码='"+pwd.trim()+"'";//身份='管理员' and
 			}
 			System.out.println(temp+" , "+con.getSelect(con.getSt(), temp));
 			if (con.getSelect(con.getSt(), temp).equals("")) {

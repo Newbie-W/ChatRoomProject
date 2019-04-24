@@ -1,8 +1,5 @@
 import java.awt.*;
 import java.awt.event.*;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
 import javax.swing.*;
 
 public class UserMainFrame extends JFrame implements ActionListener {

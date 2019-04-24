@@ -1,11 +1,8 @@
 import java.awt.*;
-
 import javax.swing.*;
-
 import java.awt.event.*;
 import java.io.*;
-import java.net.Socket;
-import java.net.UnknownHostException;
+import java.net.*;
 import java.util.*;
 
 public class GroupChatroomFrame extends ChatFrame implements ActionListener {
