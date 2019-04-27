@@ -55,9 +55,43 @@ public class DBCon {
 		closeSt();
 	}
 	
-	public void delete(String )
+	public void delete(String tableName, String attribute1) {
+		String a1 = "'" + attribute1 + "'";
+		//String a2 = "'" + attribute2 + "'";
+		String temp = "delete from "+tableName+" where ÓÃ»§Ãû = "+a1;
+		try {
+			stmt.executeUpdate(temp);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		closeSt();
+	}
 	
-	public void getUpdate() {
+	public void change(String tableName, String attribute1, String attribute2, String attribute3) {
+		String a1 = "'" + attribute1 + "'";
+		String a2 = "'" + attribute2 + "'";
+		String a3 = "'" + attribute3 + "'";
+		String temp = "";
+		try {
+			stmt.executeUpdate(temp);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void search(String tableName, String attribute1, String attribute2, String attribute3) {
+		String a1 = "'" + attribute1 + "'";
+		String a2 = "'" + attribute2 + "'";
+		String a3 = "'" + attribute3 + "'";
+		String temp = "";
+		try {
+			stmt.executeQuery(temp);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void getUpdate(Statement stmt, String temp) {
 		
 	}
 	
