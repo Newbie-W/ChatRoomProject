@@ -1,5 +1,7 @@
 import java.sql.*;
 
+import javax.swing.JOptionPane;
+
 public class DBCon {
 	private Connection con;
 	private Statement stmt;
@@ -26,6 +28,34 @@ public class DBCon {
 	public boolean isConStart() {
 		return isStart;
 	}
+	
+	public void add(String tableName, String attribute1, String attribute2, String attribute3) {
+		String a1 = "'" + attribute1 + "'";
+		String a2 = "'" + attribute2 + "'";
+		String a3 = "'" + attribute3 + "'";
+		String test = "selete * from " + tableName + " where 用户名=" + a1;
+		try {
+			rs = stmt.executeQuery(test);
+			while (rs.next()) {
+				if (rs != null) {
+					JOptionPane.showMessageDialog(null, "注册失败，已有同名用户");
+					return ;
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		String temp = "insert into "+tableName+" values( "+a1+" , "+a2+" , "+a3+" )";
+		try {
+			stmt.executeUpdate(temp);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		closeSt();
+	}
+	
+	public void delete(String )
 	
 	public void getUpdate() {
 		

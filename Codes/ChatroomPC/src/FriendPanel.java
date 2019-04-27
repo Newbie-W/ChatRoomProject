@@ -82,7 +82,7 @@ public class FriendPanel extends JPanel implements ActionListener, ListSelection
 	
 	public void mouseClicked(MouseEvent e) {
 		if (e.getClickCount() == 2) {
-			String title = (String)listModel.get(((JList)(e.getSource())).getSelectedIndex());
+			String title = (String)listModel.get( ((JList)(e.getSource())).getSelectedIndex() );
 			System.out.println(""+ title);
 			PrivateChatroomFrame privateChat = new PrivateChatroomFrame();
 			privateChat.setTitle(""+title);

@@ -14,7 +14,7 @@ public class ManagerLoginFrame extends JFrame implements ActionListener {
 	int x, y;
 	DBCon con;
 	
-	ManagerLoginFrame() {
+	ManagerLoginFrame(User UserInfo) {
 		initFrame();
 		setFrameLook();
 		actionProcessor();
@@ -93,7 +93,7 @@ public class ManagerLoginFrame extends JFrame implements ActionListener {
 				JOptionPane.showMessageDialog(null, "µÇÂ¼³É¹¦");
 				con.closeSt();
 				this.setVisible(false);
-				new UserMainFrame(new User(uname, pwd));
+				new ManagerMainFrame(new User(uname, pwd));
 			}
 		}
 	}

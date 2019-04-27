@@ -57,7 +57,7 @@ public class WelcomeFrame extends JFrame implements ActionListener {
 		if (e.getSource() == manB) {
 			this.setVisible(false);
 			userInfo.setIdentity("π‹¿Ì‘±");
-			ManagerLoginFrame loginF = new ManagerLoginFrame();
+			ManagerLoginFrame loginF = new ManagerLoginFrame(userInfo);
 			//UserLoginFrame loginF = new UserLoginFrame(userInfo);
 		}else if (e.getSource() == usrB) {
 			this.setVisible(false);
