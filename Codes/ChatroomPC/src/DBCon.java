@@ -56,9 +56,14 @@ public class DBCon {
 	}
 	
 	public void delete(String tableName, String attribute1) {
-		String a1 = "'" + attribute1 + "'";
+		String a1Name = "用户名 ";
+		//String a2Name = "密码";
+		//String a3Name = "身份";
+		String a1 = a1Name + " = '" + attribute1 + "'";
+		//String a1 = "'" + attribute1 + "'";
 		//String a2 = "'" + attribute2 + "'";
-		String temp = "delete from "+tableName+" where 用户名 = "+a1;
+		//String temp = "delete from "+tableName+" where 用户名 = "+a1;
+		String temp = "delete from "+tableName+" where "+a1;
 		try {
 			stmt.executeUpdate(temp);
 		} catch (SQLException e) {
@@ -68,10 +73,42 @@ public class DBCon {
 	}
 	
 	public void change(String tableName, String attribute1, String attribute2, String attribute3) {
-		String a1 = "'" + attribute1 + "'";
+		/*String a1 = "'" + attribute1 + "'";
 		String a2 = "'" + attribute2 + "'";
 		String a3 = "'" + attribute3 + "'";
-		String temp = "";
+		String temp = "update UserInfo where 用户名 = "+ a1;
+		if (!isA2Null && !isA3Null) {
+			temp += "set 密码 = "+ a2 +"and 身份 = "+ a3;
+		} else if (!isA2Null && isA3Null) {
+			temp += "set 密码 = "+ a2;
+		} else if ( isA2Null && !isA3Null) {
+			temp += "set 身份 = "+ a3;
+		} else if (isA2Null && isA3Null) {
+			System.out.println("信息均为空，默认不改动");
+		} else {
+			System.out.println("DB的错误else");
+		}
+		*/
+		String a1Name = "用户名 ";
+		String a2Name = "密码";
+		String a3Name = "身份";
+		String a1 = a1Name + " = '" + attribute1 + "'";
+		String a2 = a2Name + " = '" + attribute2 + "'";
+		String a3 = a3Name + " = '" + attribute3 + "'";
+		String temp = "update UserInfo where "+a1;
+		boolean isA2Null = "".equals(a2);
+		boolean isA3Null = "".equals(a3);
+		if (!isA2Null && !isA3Null) {
+			temp += "set "+ a2 +" and "+ a3;
+		} else if (!isA2Null && isA3Null) {
+			temp += "set "+ a2;
+		} else if ( isA2Null && !isA3Null) {
+			temp += "set "+ a3;
+		} else if (isA2Null && isA3Null) {
+			System.out.println("信息均为空，默认不改动");
+		} else {
+			System.out.println("DB的错误else");
+		}
 		try {
 			stmt.executeUpdate(temp);
 		} catch (SQLException e) {
@@ -80,10 +117,33 @@ public class DBCon {
 	}
 	
 	public void search(String tableName, String attribute1, String attribute2, String attribute3) {
-		String a1 = "'" + attribute1 + "'";
-		String a2 = "'" + attribute2 + "'";
-		String a3 = "'" + attribute3 + "'";
-		String temp = "";
+		String a1Name = "用户名 ";
+		String a2Name = "密码";
+		String a3Name = "身份";
+		String a1 = a1Name + " = '" + attribute1 + "'";
+		String a2 = a2Name + " = '" + attribute2 + "'";
+		String a3 = a3Name + " = '" + attribute3 + "'";
+		String temp = "select * from UserInfo ";
+		boolean isA1Null = "".equals(attribute1);
+		boolean isA2Null = "".equals(attribute2);
+		boolean isA3Null = "".equals(attribute3);
+		if ( !isA1Null ) {
+			temp = temp + "where " + a1;
+			if ( !isA2Null )
+				temp = temp + " and " + a2;
+			if ( !isA3Null )
+				temp = temp + " and " + a3;
+			
+		}
+		else {
+			if ( !isA2Null ) {
+				temp = temp + "where " + a1;
+				if ( !isA3Null )
+					temp = temp + " and " + a2;
+			}
+			else if ( !isA3Null )
+				temp = temp + "where " + a3;
+		}
 		try {
 			stmt.executeQuery(temp);
 		} catch (SQLException e) {
@@ -92,7 +152,11 @@ public class DBCon {
 	}
 	
 	public void getUpdate(Statement stmt, String temp) {
-		
+		try {
+			stmt.executeUpdate(temp);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public String getSelect(Statement stmt, String temp) {
