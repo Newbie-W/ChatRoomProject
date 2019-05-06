@@ -15,7 +15,7 @@ public class DBCon {
 			con = DriverManager.getConnection(conUrl);
 			stmt = con.createStatement();
 			isStart = true;
-			//System.out.println("new "+stmt);
+			System.out.println("connect state:"+isStart);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -33,7 +33,8 @@ public class DBCon {
 		String a1 = "'" + attribute1 + "'";
 		String a2 = "'" + attribute2 + "'";
 		String a3 = "'" + attribute3 + "'";
-		String test = "selete * from " + tableName + " where 用户名=" + a1;
+		String test = "select * from " + tableName + " where 用户名=" + a1;
+		
 		try {
 			rs = stmt.executeQuery(test);
 			while (rs.next()) {
@@ -46,13 +47,14 @@ public class DBCon {
 			e.printStackTrace();
 		}
 		
-		String temp = "insert into "+tableName+" values( "+a1+" , "+a2+" , "+a3+" )";
+		String temp = "insert into "+tableName+" values( "+a1+" , "+a2+" , "+a3+" , ' ' )";
+		System.out.println(temp);
 		try {
 			stmt.executeUpdate(temp);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		closeSt();
+		//closeSt();
 	}
 	
 	public void delete(String tableName, String attribute1) {
@@ -69,7 +71,7 @@ public class DBCon {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		closeSt();
+		//closeSt();
 	}
 	
 	public void change(String tableName, String attribute1, String attribute2, String attribute3) {
@@ -95,11 +97,13 @@ public class DBCon {
 		String a1 = a1Name + " = '" + attribute1 + "'";
 		String a2 = a2Name + " = '" + attribute2 + "'";
 		String a3 = a3Name + " = '" + attribute3 + "'";
-		String temp = "update UserInfo where "+a1;
-		boolean isA2Null = "".equals(a2);
-		boolean isA3Null = "".equals(a3);
-		if (!isA2Null && !isA3Null) {
+		String temp = "update UserInfo ";
+		//boolean isA2Null = "".equals(a2);
+		//boolean isA3Null = "".equals(a3);
+		//System.out.println(!isA2Null+"+"+!isA3Null);
+		/*if (!(isA2Null) && !(isA3Null)) {
 			temp += "set "+ a2 +" and "+ a3;
+			
 		} else if (!isA2Null && isA3Null) {
 			temp += "set "+ a2;
 		} else if ( isA2Null && !isA3Null) {
@@ -108,7 +112,9 @@ public class DBCon {
 			System.out.println("信息均为空，默认不改动");
 		} else {
 			System.out.println("DB的错误else");
-		}
+		}*/
+		temp += "set "+ a2 +" , "+ a3;
+		temp = temp + " where "+ a1;System.out.println(temp+"000"+stmt);
 		try {
 			stmt.executeUpdate(temp);
 		} catch (SQLException e) {
@@ -116,7 +122,7 @@ public class DBCon {
 		}
 	}
 	
-	public void search(String tableName, String attribute1, String attribute2, String attribute3) {
+	public String search(String tableName, String attribute1, String attribute2, String attribute3) {
 		String a1Name = "用户名 ";
 		String a2Name = "密码";
 		String a3Name = "身份";
@@ -127,6 +133,7 @@ public class DBCon {
 		boolean isA1Null = "".equals(attribute1);
 		boolean isA2Null = "".equals(attribute2);
 		boolean isA3Null = "".equals(attribute3);
+		String temString = "", resultString = "";
 		if ( !isA1Null ) {
 			temp = temp + "where " + a1;
 			if ( !isA2Null )
@@ -145,9 +152,17 @@ public class DBCon {
 				temp = temp + "where " + a3;
 		}
 		try {
-			stmt.executeQuery(temp);
+			rs = stmt.executeQuery(temp);
+			while (rs.next()) {
+				for (int i = 1; i <= 4; i++) {
+					temString = rs.getString(i) + (i==4?"\n":"\t");
+					resultString += temString;
+				}
+			}
+			return resultString;
 		} catch (SQLException e) {
 			e.printStackTrace();
+			return null;
 		}
 	}
 	

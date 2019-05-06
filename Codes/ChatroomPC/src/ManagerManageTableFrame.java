@@ -15,6 +15,7 @@ public class ManagerManageTableFrame extends JFrame implements ActionListener {
 	Dimension screenSize;
 	int x, y;
 	DBCon con;
+	boolean isResultBlank = false;
 	ManagerManageTableFrame() {
 		initFrame();
 		setFrameLook();
@@ -50,6 +51,8 @@ public class ManagerManageTableFrame extends JFrame implements ActionListener {
 		x = (int)(screenSize.getWidth() - getWidth()) / 2;
 		y = (int)(screenSize.getHeight() - getHeight()) / 2;
 		setLocation(x, y);
+		con = new DBCon();
+		display();
 	}
 	
 	public void setFrameLook() {
@@ -64,7 +67,6 @@ public class ManagerManageTableFrame extends JFrame implements ActionListener {
 		btnP.setLayout(new GridLayout(2, 2, 10, 10));
 		
 		tableNameL.setBounds(250, 0, 60, 25);
-		scrollResult.setLayout(null);
 		scrollResult.setBounds(250, 30, 215, 300);
 		inputP.add(unameL); inputP.add(unameTf); inputP.add(pwdL); inputP.add(pwdTf); inputP.add(identityL); inputP.add(identityTf);
 		btnP.add(insertBtn); btnP.add(changeBtn); btnP.add(deleteBtn); btnP.add(searchBtn);
@@ -83,14 +85,31 @@ public class ManagerManageTableFrame extends JFrame implements ActionListener {
 		String pwd = pwdTf.getText();	//the second attribute
 		String identity = identityTf.getText();	//the third attribute
 		if (e.getSource() == insertBtn) {
-			
+			con = new DBCon();
+			con.add("UserInfo", uname, pwd, identity);
+			display();
 		} else if (e.getSource() == changeBtn) {
-			
+			con = new DBCon();
+			con.change("UserInfo", uname, pwd, identity);
+			display();//con.closeSt();
 		} else if (e.getSource() == deleteBtn) {
-			
+			con = new DBCon();
+			con.delete("UserInfo", uname);
+			display();
 		} else if (e.getSource() == searchBtn) {
-			
+			con = new DBCon();
+			String result = con.search("UserInfo", uname, pwd, identity);
+			con.closeSt();
+			resultTa.setText("查找结果如下：\n用户名\t密码\t身份\n");
+			resultTa.append(result);
 		}
+	}
+	
+	public void display() {
+		String result = con.getSelect(con.getSt(), "select * from UserInfo");
+		con.closeSt();
+		resultTa.setText("用户名\t密码\t身份\n");
+		resultTa.append(result);
 	}
 	
 }
