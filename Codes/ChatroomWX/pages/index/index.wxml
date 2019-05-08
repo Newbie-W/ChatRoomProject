@@ -1,0 +1,14 @@
+<!--index.wxml-->
+<view class='itemView'>用户名：
+  <input class='input' name='uname' placeholder='请输入用户名' bindinput='unameInput'></input>
+</view>
+
+<view class='itemView'>密  码 ：
+  <input class='input' password name='pwd' placeholder='请输入密码' bindinput='pwdInput' />
+</view>
+
+<view class='btnView'>
+  <button class='btn' bindtap='loginBtnClick'>登录</button>
+  <button class='btn' bindtap='resetBtnClick'>清除</button>
+</view>
+
