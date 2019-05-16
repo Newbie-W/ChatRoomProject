@@ -7,7 +7,9 @@ import java.util.*;
 import javax.swing.*;
 
 /*注意之后完善输入内容不能为空；
- * 还有maxNum、port只能为正整数（不是负的、0、字符串）
+ * 还有maxNum、port只能为正整数（不是字符串）（临时可不解决）
+ * 启动一次连接，不连接客户端，再关闭后启动，则启动报错（怀疑是线程未关闭，循环还在运行问题）。
+ * 终止线程运行问题
  * */
 public class ServerChatroomFrame extends ChatFrame implements ActionListener {
 	JLabel portL, maxNumL;
@@ -15,11 +17,11 @@ public class ServerChatroomFrame extends ChatFrame implements ActionListener {
 	JButton startBtn, stopBtn;
 	ServerSocket sSocket;
 	Socket cSocket;
-	DataInputStream in;
-	DataOutputStream out;
+	//DataInputStream in;
+	//DataOutputStream out;
 	//ServerThread sThread;
-	MessageThread msgThread;
-	ArrayList<MessageThread> clients;
+	ClientThread msgThread;
+	ArrayList<ClientThread> clients;
 	
 	boolean isStart = false;
 	public static void main(String[] args) {
@@ -44,7 +46,7 @@ public class ServerChatroomFrame extends ChatFrame implements ActionListener {
 		maxNumTf = new JTextField("30");
 		startBtn = new JButton("启动");
 		stopBtn = new JButton("停止");
-		//stopBtn.setEnabled(false);
+		stopBtn.setEnabled(false);
 	}
 	
 	public void setFrameLook() {
@@ -89,6 +91,13 @@ public class ServerChatroomFrame extends ChatFrame implements ActionListener {
 				
 			}
 		});
+		
+		sendBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				sendMessage();
+				msgSendTf.setText("");
+			}
+		});
 	}
 	
 	public void actionPerformed(ActionEvent e) {
@@ -97,16 +106,19 @@ public class ServerChatroomFrame extends ChatFrame implements ActionListener {
 				JOptionPane.showMessageDialog(this, "服务器已经启动", "错误", JOptionPane.ERROR_MESSAGE);
 				return;
 			}
-			int maxNum;
 			int port = Integer.parseInt(portTf.getText());
-			maxNum = Integer.parseInt(maxNumTf.getText());
-			//testEnv();
-			serverStart(maxNum, port);
-			if (isStart) {			/*防止sSocket建立异常，还执行后续操作*/
-				startBtn.setEnabled(false);
-				maxNumTf.setEditable(false);
-				portTf.setEditable(false);
-				stopBtn.setEnabled(true);
+			int maxNum = Integer.parseInt(maxNumTf.getText());
+			if (port <= 2048 || maxNum<1) {
+				JOptionPane.showMessageDialog(this, "数据设置不正确，端口要>2048，最大容纳量至少>=1");
+				//return了，也会运行后面代码？？
+			} else {
+				serverStart(maxNum, port);
+				if (isStart) {			/*防止sSocket建立异常，还执行后续操作*/
+					startBtn.setEnabled(false);
+					maxNumTf.setEditable(false);
+					portTf.setEditable(false);
+					stopBtn.setEnabled(true);
+				}
 			}
 		} else if (e.getSource() == stopBtn) {
 			if (!isStart) {
@@ -121,17 +133,12 @@ public class ServerChatroomFrame extends ChatFrame implements ActionListener {
 		}
 	}
 	
-	public void TestEnv() {
-		
-	}
-	
-	public void serverStart(int maxNum, final int  port) {
-		clients = new ArrayList<MessageThread>();
+	public void serverStart(final int maxNum, final int port) {
+		clients = new ArrayList<ClientThread>();
 		try {
 			Thread t = new Thread(new Runnable() {
 				public void run() {
 					try {
-						//System.out.println("server----");
 						sSocket = new ServerSocket(port);
 					} catch (IOException e) {
 						System.out.println(e.getMessage());
@@ -140,17 +147,19 @@ public class ServerChatroomFrame extends ChatFrame implements ActionListener {
 					
 					while(true) {
 						try {
-							cSocket = sSocket.accept();
+							if ( isStart==true && sSocket!=null && !sSocket.isClosed()) //有用吗？这样写合理吗？
+								cSocket = sSocket.accept();
+							else break;
 						} catch (IOException e) {
 							e.printStackTrace();
 						}
-						JOptionPane.showMessageDialog(null , "一位用户已连接");
-						//serverService(cSocket);
-						MessageThread client = new MessageThread(cSocket);
-						client.start();
-						//out = client.getOut();
-						clients.add(client);
-						System.out.println("clients.size=" + clients.size());
+						if ( isClientsNumMax(cSocket, maxNum) ) {
+							continue;
+						} else {
+							ClientThread client = new ClientThread(cSocket);
+							client.start();
+							clients.add(client);
+						}
 					}	
 				}
 			});
@@ -161,7 +170,6 @@ public class ServerChatroomFrame extends ChatFrame implements ActionListener {
 			portTf.setEditable(false);
 			stopBtn.setEnabled(true);
 			isStart = true;
-			
 		}  catch (Exception e) {
 			isStart = false;
 			System.out.println(e.getMessage());
@@ -169,7 +177,21 @@ public class ServerChatroomFrame extends ChatFrame implements ActionListener {
 		}
 	}
 	
-	public void serverService(final Socket cSocket) {
+	public boolean isClientsNumMax(Socket socket, int max) {
+		if (clients.size() >= max) {
+			try {
+				DataOutputStream out = new DataOutputStream(socket.getOutputStream());
+				out.writeUTF("Server:无法连接！服务器爆满\n");
+				out.close();
+				socket.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			return true;
+		}
+		return false;
+	}
+	/*public void serverService(final Socket cSocket) {
 		//while (true) {
 			try {
 				new Thread(new Runnable(){
@@ -199,36 +221,49 @@ public class ServerChatroomFrame extends ChatFrame implements ActionListener {
 					 }
 				}).start();
 				
-				/*BufferedReader reader = new BufferedReader(new InputStreamReader(cSocket.getInputStream()));
+				//*BufferedReader reader = new BufferedReader(new InputStreamReader(cSocket.getInputStream()));
 				PrintWriter writer = new PrintWriter(cSocket.getOutputStream());
 				String message = reader.readLine();
 				writer.println(message);  
-		        writer.flush();*/
+		        writer.flush();//*
 				
 			} catch (Exception e) {
 				System.out.println(e.getMessage());
 				e.printStackTrace();
 			}
 		//}
-	}
+	}*/
 	
 	public void closeConnect() {
-		try {
-			out.close();
-			in.close();
-			cSocket.close();
-			sSocket.close();
-		} catch (IOException e) {
-			e.printStackTrace();
+		
+		for (int i=clients.size()-1; i>=0; i--) {
+			try {
+				clients.get(i).outStream.close();
+				clients.get(i).inStream.close();
+				clients.get(i).socket.close();
+				//clients.get(i).  终止线程运行
+				clients.remove(i);
+				
+				System.out.println("循环中 Still start?"+isStart);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
+		if (sSocket != null || isStart==true)
+			try {
+				sSocket.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		isStart = false;
 	}
 	
 	public void serverClose() {
-		//if (isStart)
-		
-		JOptionPane.showMessageDialog(this, "成功关闭服务器ServerSocket");
-		closeConnect();
-		isStart = false;
+		if (isStart) {
+			System.out.println("start?"+isStart);
+			closeConnect();
+			JOptionPane.showMessageDialog(this, "成功关闭服务器ServerSocket");
+		}
 	}
 	
 	public void sendMessage() {
@@ -236,7 +271,10 @@ public class ServerChatroomFrame extends ChatFrame implements ActionListener {
 			JOptionPane.showMessageDialog(this, "服务器尚未启动");
 			return ;
 		}
-		//if (Clients.size() == 0)
+		if (clients.size() == 0) {
+			JOptionPane.showMessageDialog(this, "暂无用户连接");
+			return ;
+		}
 		
 		String message = msgSendTf.getText();
 		//
@@ -245,12 +283,6 @@ public class ServerChatroomFrame extends ChatFrame implements ActionListener {
 	}
 	
 	public void sendMessageToAll() {
-		if (!isStart) {
-			JOptionPane.showMessageDialog(this, "服务器尚未启动");
-			return ;
-		}
-		//if (Clients.size() == 0)
-		
 		String message = msgSendTf.getText();
 		for (int i = clients.size()-1; i >= 0; i--) {
 			try {
@@ -261,13 +293,13 @@ public class ServerChatroomFrame extends ChatFrame implements ActionListener {
 		}
 	}
 	
-	public class MessageThread extends Thread {
+	public class ClientThread extends Thread {
 		Socket socket;
 		DataInputStream inStream;
 		DataOutputStream outStream;
 		User user;
 		
-		MessageThread(Socket cSocket) {
+		ClientThread(Socket cSocket) {
 			socket = cSocket;
 			try {
 				inStream = new DataInputStream(socket.getInputStream());
@@ -275,8 +307,7 @@ public class ServerChatroomFrame extends ChatFrame implements ActionListener {
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
-			/**/for (int i = clients.size()-1; i >= 0; i--) {
-				System.out.println("clients.size=" + clients.size());
+			for (int i = clients.size()-1; i >= 0; i--) {
 				try {
 					clients.get(i).getOut().writeUTF("Server:连接成功，新用户上线");
 				} catch (IOException e) {
@@ -287,13 +318,12 @@ public class ServerChatroomFrame extends ChatFrame implements ActionListener {
 
 		public void run() {
 			try {
-				
-				outStream.writeUTF("Server:你好:我是服务器,连接成功。");
-				System.out.println("服务器接收消息 在运行中");
+				outStream.writeUTF("Server:你好,我是服务器,连接成功。");
+				//System.out.println("服务器接收消息 在运行中");
 				String s;
 				while (true) {
 					s = inStream.readUTF();
-					System.out.println("收到客户端的一条消息"+s+",end?"+"end\n".equals(s));
+					//System.out.println("收到客户端的一条消息"+s+",end?"+"end\n".equals(s));
 					if (s!=null) contentTa.append(s+"\n");
 					//out.writeUTF("我是服务器，我已收到");
 					//if (s!=null) break;
@@ -306,6 +336,7 @@ public class ServerChatroomFrame extends ChatFrame implements ActionListener {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+			
 		}
 
 		public DataInputStream getIn() {

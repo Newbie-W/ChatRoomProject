@@ -41,6 +41,7 @@ public class GroupChatroomFrame extends ChatFrame implements ActionListener {
 		nameTf = new JTextField();
 		connectBtn =new JButton("连接");
 		stopBtn = new JButton("停止");
+		stopBtn.setEnabled(false);
 		listModel = super.listModel;
 		userList = super.userList;
 		onlineUsers = new HashMap<String, User>();
@@ -63,6 +64,7 @@ public class GroupChatroomFrame extends ChatFrame implements ActionListener {
 	public void actionProcessor() {
 		super.actionProcessor();
 		connectBtn.addActionListener(this);
+		stopBtn.addActionListener(this);
 		msgSendTf.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//contentTa.append(msgSendTf.getText()+"\n");
@@ -89,6 +91,7 @@ public class GroupChatroomFrame extends ChatFrame implements ActionListener {
 
 	public void closeConnect() {
 		try {
+			System.out.println("关闭中");
 			out.close();
 			in.close();
 			socket.close();
@@ -100,6 +103,7 @@ public class GroupChatroomFrame extends ChatFrame implements ActionListener {
 	public void startConnect() {
 		try {
 				socket = new Socket(hostIpTf.getText(), Integer.parseInt(portTf.getText()));//socket = new Socket("127.0.0.1", 8888);
+				
 			} catch (Exception e1) {
 				System.out.println(e1.getMessage());
 				e1.printStackTrace();
@@ -151,14 +155,37 @@ public class GroupChatroomFrame extends ChatFrame implements ActionListener {
 				}  
 			}
 		}).start();
+		connectBtn.setEnabled(false);
+		portTf.setEditable(false);
+		hostIpTf.setEditable(false);
+		nameTf.setEditable(false);
+		stopBtn.setEnabled(true);
+		isConnected = true;
 	}
 	
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == connectBtn) {
 			startConnect();
-             
+			if (isConnected) {			/*防止sSocket建立异常，还执行后续操作*/
+				connectBtn.setEnabled(false);
+				portTf.setEditable(false);
+				hostIpTf.setEditable(false);
+				nameTf.setEditable(false);
+				stopBtn.setEnabled(true);
+				isConnected = true;
+			}
 		} else if (e.getSource() == stopBtn) {
+			
+			if (!isConnected) {
+				JOptionPane.showMessageDialog(this, "群聊未启动");
+				return;
+			}
 			closeConnect();
+			stopBtn.setEnabled(false);
+			connectBtn.setEnabled(true);
+			portTf.setEditable(true);
+			hostIpTf.setEditable(true);
+			nameTf.setEditable(true);
 		}
 	}
 }
