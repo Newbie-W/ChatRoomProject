@@ -1,5 +1,7 @@
 import java.awt.*;
+
 import javax.swing.*;
+
 import java.awt.event.*;
 import java.io.*;
 import java.net.*;
@@ -95,14 +97,15 @@ public class GroupChatroomFrame extends ChatFrame implements ActionListener {
 	}
 	
 	public void startConnect() {
+		try {
+				socket = new Socket(hostIpTf.getText(), Integer.parseInt(portTf.getText()));//socket = new Socket("127.0.0.1", 8888);
+			} catch (Exception e1) {
+				System.out.println(e1.getMessage());
+				e1.printStackTrace();
+			}
 		new Thread(new Runnable() {
 			public void run() {
-				try {
-					socket = new Socket(hostIpTf.getText(), Integer.parseInt(portTf.getText()));//socket = new Socket("127.0.0.1", 8888);
-				} catch (Exception e1) {
-					System.out.println(e1.getMessage());
-					e1.printStackTrace();
-				}
+				
 				System.out.println("成功建立连接S，你是C，端口号"+socket.getLocalPort());
 				try {
 					
@@ -118,6 +121,7 @@ public class GroupChatroomFrame extends ChatFrame implements ActionListener {
 					try {*/
 					//int i=0;
 					out.writeUTF("你好:我是客户端,连接成功。");
+					System.out.println("成功发送认证信息");
 					while (true) {
 						s = in.readUTF();
 						if (s!=null) contentTa.append(s+"\n");

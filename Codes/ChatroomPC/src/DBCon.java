@@ -98,10 +98,9 @@ public class DBCon {
 		String a2 = a2Name + " = '" + attribute2 + "'";
 		String a3 = a3Name + " = '" + attribute3 + "'";
 		String temp = "update UserInfo ";
-		//boolean isA2Null = "".equals(a2);
-		//boolean isA3Null = "".equals(a3);
-		//System.out.println(!isA2Null+"+"+!isA3Null);
-		/*if (!(isA2Null) && !(isA3Null)) {
+		boolean isA2Null = "".equals(a2);
+		boolean isA3Null = "".equals(a3);
+		if (!(isA2Null) && !(isA3Null)) {
 			temp += "set "+ a2 +" and "+ a3;
 			
 		} else if (!isA2Null && isA3Null) {
@@ -110,11 +109,9 @@ public class DBCon {
 			temp += "set "+ a3;
 		} else if (isA2Null && isA3Null) {
 			System.out.println("信息均为空，默认不改动");
-		} else {
-			System.out.println("DB的错误else");
-		}*/
-		temp += "set "+ a2 +" , "+ a3;
-		temp = temp + " where "+ a1;System.out.println(temp+"000"+stmt);
+		}
+		temp = temp + " where "+ a1;
+		//System.out.println(temp+"000"+stmt);
 		try {
 			stmt.executeUpdate(temp);
 		} catch (SQLException e) {

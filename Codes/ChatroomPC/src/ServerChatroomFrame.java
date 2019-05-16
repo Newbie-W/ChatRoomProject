@@ -3,6 +3,7 @@ import java.awt.event.*;
 import java.io.*;
 import java.net.*;
 import java.util.*;
+
 import javax.swing.*;
 
 /*注意之后完善输入内容不能为空；
@@ -124,14 +125,20 @@ public class ServerChatroomFrame extends ChatFrame implements ActionListener {
 	public void serverStart(int maxNum, final int  port) {
 		//Clients = new ArrayList<>();
 		try {
-			new Thread(new Runnable() {
+			Thread t = new Thread(new Runnable() {
 				public void run() {/**/
-					try {
-						sSocket = new ServerSocket(port);
-						
+					while(true) {
+						try {
+		
+							System.out.println("server----");
+							sSocket = new ServerSocket(port);
+						} catch (IOException e) {
+							System.out.println(e.getMessage());
+							e.printStackTrace();
+						}		
 						try {
 							cSocket = sSocket.accept();
-							in = new DataInputStream(cSocket.getInputStream());
+							/*in = new DataInputStream(cSocket.getInputStream());
 							out = new DataOutputStream(cSocket.getOutputStream());
 							out.writeUTF("你好:我是服务器,连接成功。");
 							String s;
@@ -148,18 +155,18 @@ public class ServerChatroomFrame extends ChatFrame implements ActionListener {
 								}
 							}
 							//contentTa.append(s+"\n");
-							out.writeUTF("我是服务器，我已收到");
+							out.writeUTF("我是服务器，我已收到");*/
 						} catch (IOException e) {
 							e.printStackTrace();
 						}
 						//JOptionPane.showMessageDialog(this, "成功建立服务器ServerSocket");
-						//serverService();
-					} catch (IOException e) {
-						System.out.println(e.getMessage());
-						e.printStackTrace();
+						serverService(cSocket);
 					}
+					
 				}
-			}).start() ;/**/
+			});/**/
+			t.setDaemon(true);
+			t.start();
 			
 			//JOptionPane.showMessageDialog(this, "成功建立服务器ServerSocket");
 			startBtn.setEnabled(false);
@@ -176,12 +183,38 @@ public class ServerChatroomFrame extends ChatFrame implements ActionListener {
 		}
 	}
 	
-	public void serverService() {
+	public void serverService(final Socket cSocket) {
 		//while (true) {
 			try {
+				/**/new Thread(new Runnable(){
+
+					public void run() {
+						try {
+							System.out.println("运行serverService中");
+							in = new DataInputStream(cSocket.getInputStream());
+							out = new DataOutputStream(cSocket.getOutputStream());
+							out.writeUTF("你好:我是服务器,连接成功。");
+							String s;
+							while (true) {
+								s = in.readUTF();
+								System.out.println("收到客户端的一条消息"+s+",end?"+"end\n".equals(s));
+								if (s!=null) contentTa.append(s+"\n");
+								out.writeUTF("我是服务器，我已收到");
+								//if (s!=null) break;
+								if ("end\n".equals(s)||"end".equals(s)) {
+									out.writeUTF("end");
+									contentTa.append("关闭\n");
+									break;
+								}
+							}
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+					 }
+				}).start();/**/
 				/*new Thread(new Runnable(){
 
-					public void run() {*/
+					public void run() {
 						try {
 							cSocket = sSocket.accept();
 							in = new DataInputStream(cSocket.getInputStream());
@@ -202,7 +235,7 @@ public class ServerChatroomFrame extends ChatFrame implements ActionListener {
 							}
 						} catch (IOException e) {
 							e.printStackTrace();
-						}
+						}*/
 						//} 
 					
 				/*}).start();*/
