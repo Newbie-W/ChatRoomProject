@@ -17,8 +17,9 @@ public class ServerChatroomFrame extends ChatFrame implements ActionListener {
 	Socket cSocket;
 	DataInputStream in;
 	DataOutputStream out;
-	//ServerThread SThread;
-	//ArrayList<> Clients;
+	//ServerThread sThread;
+	MessageThread msgThread;
+	ArrayList<MessageThread> clients;
 	
 	boolean isStart = false;
 	public static void main(String[] args) {
@@ -74,14 +75,16 @@ public class ServerChatroomFrame extends ChatFrame implements ActionListener {
 		msgSendTf.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//contentTa.append(msgSendTf.getText()+"\n");
-				try {
-					System.out.println("服务器我："+msgSendTf.getText());
-					contentTa.append(msgSendTf.getText());//+"\n"
-					out.writeUTF(msgSendTf.getText());
+				/*try {
+					//System.out.println("服务器我："+msgSendTf.getText());
+					String content = msgSendTf.getText();
+					contentTa.append("Server:" + content);//+"\n"
+					out.writeUTF("Server:" + content);
 				} catch (IOException e1) {
 					System.out.println(e1.getMessage());
 					e1.printStackTrace();
-				}
+				}*/
+				sendMessage();
 				msgSendTf.setText("");
 				
 			}
@@ -123,22 +126,58 @@ public class ServerChatroomFrame extends ChatFrame implements ActionListener {
 	}
 	
 	public void serverStart(int maxNum, final int  port) {
-		//Clients = new ArrayList<>();
+		clients = new ArrayList<MessageThread>();
 		try {
 			Thread t = new Thread(new Runnable() {
-				public void run() {/**/
+				public void run() {
+					try {
+						//System.out.println("server----");
+						sSocket = new ServerSocket(port);
+					} catch (IOException e) {
+						System.out.println(e.getMessage());
+						e.printStackTrace();
+					}
+					
 					while(true) {
 						try {
-		
-							System.out.println("server----");
-							sSocket = new ServerSocket(port);
-						} catch (IOException e) {
-							System.out.println(e.getMessage());
-							e.printStackTrace();
-						}		
-						try {
 							cSocket = sSocket.accept();
-							/*in = new DataInputStream(cSocket.getInputStream());
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+						JOptionPane.showMessageDialog(null , "一位用户已连接");
+						//serverService(cSocket);
+						MessageThread client = new MessageThread(cSocket);
+						client.start();
+						//out = client.getOut();
+						clients.add(client);
+						System.out.println("clients.size=" + clients.size());
+					}	
+				}
+			});
+			t.setDaemon(true);
+			t.start();
+			startBtn.setEnabled(false);
+			maxNumTf.setEditable(false);
+			portTf.setEditable(false);
+			stopBtn.setEnabled(true);
+			isStart = true;
+			
+		}  catch (Exception e) {
+			isStart = false;
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+		}
+	}
+	
+	public void serverService(final Socket cSocket) {
+		//while (true) {
+			try {
+				new Thread(new Runnable(){
+
+					public void run() {
+						try {
+							//System.out.println("运行serverService中");
+							in = new DataInputStream(cSocket.getInputStream());
 							out = new DataOutputStream(cSocket.getOutputStream());
 							out.writeUTF("你好:我是服务器,连接成功。");
 							String s;
@@ -154,91 +193,11 @@ public class ServerChatroomFrame extends ChatFrame implements ActionListener {
 									break;
 								}
 							}
-							//contentTa.append(s+"\n");
-							out.writeUTF("我是服务器，我已收到");*/
-						} catch (IOException e) {
-							e.printStackTrace();
-						}
-						//JOptionPane.showMessageDialog(this, "成功建立服务器ServerSocket");
-						serverService(cSocket);
-					}
-					
-				}
-			});/**/
-			t.setDaemon(true);
-			t.start();
-			
-			//JOptionPane.showMessageDialog(this, "成功建立服务器ServerSocket");
-			startBtn.setEnabled(false);
-			maxNumTf.setEditable(false);
-			portTf.setEditable(false);
-			stopBtn.setEnabled(true);
-			isStart = true;
-			//serverService();
-			
-		}  catch (Exception e) {
-			isStart = false;
-			System.out.println(e.getMessage());
-			e.printStackTrace();
-		}
-	}
-	
-	public void serverService(final Socket cSocket) {
-		//while (true) {
-			try {
-				/**/new Thread(new Runnable(){
-
-					public void run() {
-						try {
-							System.out.println("运行serverService中");
-							in = new DataInputStream(cSocket.getInputStream());
-							out = new DataOutputStream(cSocket.getOutputStream());
-							out.writeUTF("你好:我是服务器,连接成功。");
-							String s;
-							while (true) {
-								s = in.readUTF();
-								System.out.println("收到客户端的一条消息"+s+",end?"+"end\n".equals(s));
-								if (s!=null) contentTa.append(s+"\n");
-								out.writeUTF("我是服务器，我已收到");
-								//if (s!=null) break;
-								if ("end\n".equals(s)||"end".equals(s)) {
-									out.writeUTF("end");
-									contentTa.append("关闭\n");
-									break;
-								}
-							}
 						} catch (IOException e) {
 							e.printStackTrace();
 						}
 					 }
-				}).start();/**/
-				/*new Thread(new Runnable(){
-
-					public void run() {
-						try {
-							cSocket = sSocket.accept();
-							in = new DataInputStream(cSocket.getInputStream());
-							out = new DataOutputStream(cSocket.getOutputStream());
-							out.writeUTF("你好:我是服务器,连接成功。");
-							String s;
-							while (true) {
-								s = in.readUTF();
-								System.out.println("收到客户端的一条消息"+s+",end?"+"end\n".equals(s));
-								contentTa.append(s);
-								out.writeUTF("我是服务器，我已收到");
-								//if (s!=null) break;
-								if ("end\n".equals(s)||"end".equals(s)) {
-									out.writeUTF("end");
-									contentTa.append("关闭");
-									break;
-								}
-							}
-						} catch (IOException e) {
-							e.printStackTrace();
-						}*/
-						//} 
-					
-				/*}).start();*/
+				}).start();
 				
 				/*BufferedReader reader = new BufferedReader(new InputStreamReader(cSocket.getInputStream()));
 				PrintWriter writer = new PrintWriter(cSocket.getOutputStream());
@@ -246,9 +205,6 @@ public class ServerChatroomFrame extends ChatFrame implements ActionListener {
 				writer.println(message);  
 		        writer.flush();*/
 				
-				
-				
-				//out.writeUTF("你好:我是服务器,连接成功。");
 			} catch (Exception e) {
 				System.out.println(e.getMessage());
 				e.printStackTrace();
@@ -284,5 +240,84 @@ public class ServerChatroomFrame extends ChatFrame implements ActionListener {
 		
 		String message = msgSendTf.getText();
 		//
+		sendMessageToAll();
+		contentTa.append(message);
+	}
+	
+	public void sendMessageToAll() {
+		if (!isStart) {
+			JOptionPane.showMessageDialog(this, "服务器尚未启动");
+			return ;
+		}
+		//if (Clients.size() == 0)
+		
+		String message = msgSendTf.getText();
+		for (int i = clients.size()-1; i >= 0; i--) {
+			try {
+				clients.get(i).getOut().writeUTF("Server:" + message);
+			} catch (IOException e) {
+				e.printStackTrace();
+			};
+		}
+	}
+	
+	public class MessageThread extends Thread {
+		Socket socket;
+		DataInputStream inStream;
+		DataOutputStream outStream;
+		User user;
+		
+		MessageThread(Socket cSocket) {
+			socket = cSocket;
+			try {
+				inStream = new DataInputStream(socket.getInputStream());
+				outStream = new DataOutputStream(socket.getOutputStream());
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+			/**/for (int i = clients.size()-1; i >= 0; i--) {
+				System.out.println("clients.size=" + clients.size());
+				try {
+					clients.get(i).getOut().writeUTF("Server:连接成功，新用户上线");
+				} catch (IOException e) {
+					e.printStackTrace();
+				};
+			}
+		}
+
+		public void run() {
+			try {
+				
+				outStream.writeUTF("Server:你好:我是服务器,连接成功。");
+				System.out.println("服务器接收消息 在运行中");
+				String s;
+				while (true) {
+					s = inStream.readUTF();
+					System.out.println("收到客户端的一条消息"+s+",end?"+"end\n".equals(s));
+					if (s!=null) contentTa.append(s+"\n");
+					//out.writeUTF("我是服务器，我已收到");
+					//if (s!=null) break;
+					if ("end\n".equals(s)||"end".equals(s)) {
+						outStream.writeUTF("end");
+						contentTa.append("关闭\n");
+						break;
+					}
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+
+		public DataInputStream getIn() {
+			return inStream;
+		}
+
+		public DataOutputStream getOut() {
+			return outStream;
+		}
+		
+		public User getUser() {
+			return user;
+		}
 	}
 }

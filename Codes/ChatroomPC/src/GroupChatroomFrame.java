@@ -70,6 +70,7 @@ public class GroupChatroomFrame extends ChatFrame implements ActionListener {
 				try {
 					contentTa.append(msgSendTf.getText());//+"\n"
 					out.writeUTF(msgSendTf.getText());
+					System.out.println("out"+out+" 一切正常");
 				} catch (IOException e1) {
 					System.out.println(e1.getMessage());
 					e1.printStackTrace();
@@ -125,7 +126,7 @@ public class GroupChatroomFrame extends ChatFrame implements ActionListener {
 					while (true) {
 						s = in.readUTF();
 						if (s!=null) contentTa.append(s+"\n");
-						//System.out.println("hi"+s);
+						System.out.println("hi"+s);
 						//if (s!=null) break;
 						//System.out.println("来自服务器的消息"+s);
 						if ("end\n".equals(s)||"end".equals(s)) {
