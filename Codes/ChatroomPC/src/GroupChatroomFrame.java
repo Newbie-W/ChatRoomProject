@@ -46,6 +46,7 @@ public class GroupChatroomFrame extends ChatFrame implements ActionListener {
 		userList = super.userList;
 		onlineUsers = new HashMap<String, User>();
 		isConnected = false;
+		msgSendTf.setEditable(false);
 	}
 	
 	public void setFrameLook() {
@@ -68,22 +69,24 @@ public class GroupChatroomFrame extends ChatFrame implements ActionListener {
 		msgSendTf.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//contentTa.append(msgSendTf.getText()+"\n");
-				System.out.println("我："+msgSendTf.getText());
+				/*System.out.println("我："+msgSendTf.getText());
 				try {
-					contentTa.append(msgSendTf.getText());//+"\n"
-					out.writeUTF(msgSendTf.getText());
-					System.out.println("out"+out+" 一切正常");
+					//contentTa.append(msgSendTf.getText());//+"\n"
+					//out.writeUTF(msgSendTf.getText());
+					//System.out.println("out"+out+" 一切正常");
+					
 				} catch (IOException e1) {
 					System.out.println(e1.getMessage());
 					e1.printStackTrace();
-				}
+				}*/
+				sendMessage();
 				msgSendTf.setText("");
 				
 			}
 		});
 		sendBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				contentTa.append(msgSendTf.getText()+"\n");
+				sendMessage();
 				msgSendTf.setText("");
 			}
 		});
@@ -116,20 +119,15 @@ public class GroupChatroomFrame extends ChatFrame implements ActionListener {
 					
 					in = new DataInputStream(socket.getInputStream());
 					out = new DataOutputStream(socket.getOutputStream());
-					/*} catch (NumberFormatException e2) {
-						e2.printStackTrace();
-					} catch (UnknownHostException e2) {
-						e2.printStackTrace();
-					} catch (IOException e2) {
-						e2.printStackTrace();
-					}
-					try {*/
-					//int i=0;
 					out.writeUTF("你好:我是客户端,连接成功。");
 					System.out.println("成功发送认证信息");
 					while (true) {
 						s = in.readUTF();
-						if (s!=null) contentTa.append(s+"\n");
+						if (s!=null) {
+							//contentTa.append(s+"\n");
+							s = decapsulateMsg(s);
+							contentTa.append(s+"\n");
+						}
 						System.out.println("hi"+s);
 						//if (s!=null) break;
 						//System.out.println("来自服务器的消息"+s);
@@ -155,11 +153,6 @@ public class GroupChatroomFrame extends ChatFrame implements ActionListener {
 				}  
 			}
 		}).start();
-		connectBtn.setEnabled(false);
-		portTf.setEditable(false);
-		hostIpTf.setEditable(false);
-		nameTf.setEditable(false);
-		stopBtn.setEnabled(true);
 		isConnected = true;
 	}
 	
@@ -172,6 +165,7 @@ public class GroupChatroomFrame extends ChatFrame implements ActionListener {
 				hostIpTf.setEditable(false);
 				nameTf.setEditable(false);
 				stopBtn.setEnabled(true);
+				msgSendTf.setEditable(true);
 				isConnected = true;
 			}
 		} else if (e.getSource() == stopBtn) {
@@ -186,6 +180,72 @@ public class GroupChatroomFrame extends ChatFrame implements ActionListener {
 			portTf.setEditable(true);
 			hostIpTf.setEditable(true);
 			nameTf.setEditable(true);
+			msgSendTf.setEditable(false);
+			isConnected = false;
 		}
+	}
+	
+	public void sendMessage() {
+		String message = msgSendTf.getText();
+		try {
+			out.writeUTF( encapsulateMsg(message) );
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public String encapsulateMsg(String s) {
+		//还需进一步修订
+		/*发送信息
+		 * 关闭连接： 		CLOSE
+		 * 登录： 			LOGIN@@@用户名@@@IP@@@PORT
+		 * 发送群聊信息 ： 	MESSAGE@@@发送人@@@ALL@@@信息内容
+		 * 发送私聊信息：  	MESSAGE@@@发送人@@@接收人@@@信息内容
+		 */
+		String msg = "";
+		String name = "Client"; //后期改为唯一标识名
+		if ("CLOSE".equals(s)) {
+			msg = "CLOSE";
+			System.out.println("服务器打算关闭");
+		} else if ("".equals(s)) {
+			
+		} else if ("HELLO".equals(s)) {
+			System.out.println("欢迎");
+		} else {
+			msg = "MESSAGE" + "@@@" + name + "@@@ALL@@@" + s;
+		}
+		System.out.println("------encapsulate："+msg);
+		return msg;
+	}
+	
+	public String decapsulateMsg(String s) {
+		String msg = s;
+		String sender = "";
+		String receiver = "";
+		String message = "";
+		String orderMsg[] = msg.split("@@@");
+		int length = orderMsg.length;
+		String orderName = orderMsg[0];
+		System.out.println("-----"+orderName);
+		if (length >= 2)
+			sender = orderMsg[1];
+		if (length >= 3) 
+			receiver = orderMsg[2];
+		if (length >= 4)
+			message = orderMsg[3];
+		if ("CLOSE".equals(orderName)) {
+			msg = "CLOSE";
+			System.out.println("关闭连接");
+		} else if ("LOGIN".equals(orderName)) {
+			
+		} else if ("MESSAGE".equals(orderName)) {
+			sender = orderMsg[1];
+			receiver = orderMsg[2];
+			message = orderMsg[3];
+			//System.out.println("-----"+sender+ " " + receiver + " " + message + "-----");
+			msg = sender + ":" + message;
+			System.out.println("------"+msg);
+		}
+		return msg;
 	}
 }

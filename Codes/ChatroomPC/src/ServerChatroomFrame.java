@@ -47,6 +47,7 @@ public class ServerChatroomFrame extends ChatFrame implements ActionListener {
 		startBtn = new JButton("启动");
 		stopBtn = new JButton("停止");
 		stopBtn.setEnabled(false);
+		msgSendTf.setEditable(false);
 	}
 	
 	public void setFrameLook() {
@@ -118,6 +119,7 @@ public class ServerChatroomFrame extends ChatFrame implements ActionListener {
 					maxNumTf.setEditable(false);
 					portTf.setEditable(false);
 					stopBtn.setEnabled(true);
+					msgSendTf.setEditable(true);
 				}
 			}
 		} else if (e.getSource() == stopBtn) {
@@ -130,6 +132,7 @@ public class ServerChatroomFrame extends ChatFrame implements ActionListener {
 			startBtn.setEnabled(true);
 			maxNumTf.setEditable(true);
 			portTf.setEditable(true);
+			msgSendTf.setEditable(false);
 		}
 	}
 	
@@ -286,11 +289,45 @@ public class ServerChatroomFrame extends ChatFrame implements ActionListener {
 		String message = msgSendTf.getText();
 		for (int i = clients.size()-1; i >= 0; i--) {
 			try {
-				clients.get(i).getOut().writeUTF("Server:" + message);
+				clients.get(i).getOut().writeUTF( encapsulateMsg(message) );
 			} catch (IOException e) {
 				e.printStackTrace();
 			};
 		}
+	}
+	
+	public void sendMessageToAll(String s) {
+		for (int i = clients.size()-1; i >= 0; i--) {
+			try {
+				System.out.println("%%%%%---"+s);
+				clients.get(i).getOut().writeUTF(s);
+			} catch (IOException e) {
+				e.printStackTrace();
+			};
+		}
+	}
+	
+	public String encapsulateMsg(String s) {		//设定信息格式    命令（如果是关闭这一类的则，只是CLOSE）@@@发送者@@@接收信息者@@@信息内容
+		//还需进一步修订
+		/*发送信息
+		 * 关闭连接： 		CLOSE
+		 * 登录： 			LOGIN@@@用户名@@@IP@@@PORT
+		 * 发送群聊信息 ： 	MESSAGE@@@发送人@@@ALL@@@信息内容
+		 * 发送私聊信息：  	MESSAGE@@@发送人@@@接收人@@@信息内容
+		 */
+		String msg = "";
+		if ("CLOSE".equals(s)) {
+			msg = "CLOSE";
+			System.out.println("服务器打算关闭");
+		} else if ("".equals(s)) {
+			
+		} else if ("HELLO".equals(s)) {
+			System.out.println("欢迎");
+		} else {
+			msg = "MESSAGE" + "@@@" + "Server"+ "@@@ALL@@@" + s;
+		}
+		System.out.println("------encapsulate："+msg);
+		return msg;
 	}
 	
 	public class ClientThread extends Thread {
@@ -310,6 +347,7 @@ public class ServerChatroomFrame extends ChatFrame implements ActionListener {
 			for (int i = clients.size()-1; i >= 0; i--) {
 				try {
 					clients.get(i).getOut().writeUTF("Server:连接成功，新用户上线");
+					//clients.get(i).getOut().writeUTF("Server:连接成功，新用户上线"+"LOGIN@@@"+user.getUname()+"@@@"+socket.getInetAddress()+"@@@"+socket.getPort());
 				} catch (IOException e) {
 					e.printStackTrace();
 				};
@@ -323,7 +361,8 @@ public class ServerChatroomFrame extends ChatFrame implements ActionListener {
 				String s;
 				while (true) {
 					s = inStream.readUTF();
-					//System.out.println("收到客户端的一条消息"+s+",end?"+"end\n".equals(s));
+					s = decapsulateMsg(s);
+					System.out.println("收到客户端的一条消息:"+s);
 					if (s!=null) contentTa.append(s+"\n");
 					//out.writeUTF("我是服务器，我已收到");
 					//if (s!=null) break;
@@ -339,6 +378,61 @@ public class ServerChatroomFrame extends ChatFrame implements ActionListener {
 			
 		}
 
+		public void deliverMsg() {
+			
+		}
+		
+		public String decapsulateMsg(String s) {
+			String msg = s;
+			String sender = "";
+			String receiver = "";
+			String message = "";
+			String orderMsg[] = msg.split("@@@");
+			int length = orderMsg.length;
+			String orderName = orderMsg[0];
+			System.out.println("-----"+orderName);
+			if (length >= 2)
+				sender = orderMsg[1];
+			if (length >= 3) 
+				receiver = orderMsg[2];
+			if (length >= 4)
+				message = orderMsg[3];
+			if ("CLOSE".equals(orderName)) {
+				msg = "CLOSE";
+				System.out.println("关闭连接");
+			} else if ("LOGIN".equals(orderName)) {
+				
+			} else if ("MESSAGE".equals(orderName)) {
+				sender = orderMsg[1];
+				receiver = orderMsg[2];
+				message = orderMsg[3];
+				System.out.println("-----"+sender+ " " + receiver + " " + message + "-----");
+				if ( "ALL".equals(receiver) ) {
+					System.out.println("群聊消息"+s);
+					//sendMessageToAll(s);
+					for (int i = clients.size()-1; i >= 0; i--) {
+						try {
+							System.out.println("######---"+s);
+							contentTa.append(s+"\n");
+							clients.get(i).getOut().writeUTF(s);
+						} catch (IOException e) {
+							e.printStackTrace();
+						};
+					}
+				} else if ("Server".equals(sender)) {
+					System.out.println("sender:Server");
+				} else if ("Server".equals(receiver)) {
+					System.out.println("receiver:Server");
+				} else {
+					System.out.println("sendtoALL");
+					msg = s;
+					sendMessageToAll(s);
+				}
+			}
+			System.out.println(msg);
+			return msg;
+		}
+		
 		public DataInputStream getIn() {
 			return inStream;
 		}
