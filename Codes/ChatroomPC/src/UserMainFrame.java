@@ -67,6 +67,12 @@ public class UserMainFrame extends JFrame implements ActionListener {
 		groupChatBtn.addActionListener(this);
 	}
 
+	public void setUname(String name) {
+		uname = name;
+		unameL.setText(uname);
+		friendP.setUname(uname);
+	}
+	
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == groupChatBtn) {
 			new GroupChatroomFrame();

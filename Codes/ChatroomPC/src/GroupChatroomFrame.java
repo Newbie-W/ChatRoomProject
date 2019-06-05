@@ -126,7 +126,7 @@ public class GroupChatroomFrame extends ChatFrame implements ActionListener {
 						if (s!=null) {
 							//contentTa.append(s+"\n");
 							s = decapsulateMsg(s);
-							contentTa.append(s+"\n");
+							contentTa.append(s.trim()+"\n");
 						}
 						System.out.println("hi"+s);
 						//if (s!=null) break;
@@ -186,6 +186,7 @@ public class GroupChatroomFrame extends ChatFrame implements ActionListener {
 	}
 	
 	public void sendMessage() {
+		System.out.println("11111111111");
 		String message = msgSendTf.getText();
 		try {
 			out.writeUTF( encapsulateMsg(message) );
@@ -246,6 +247,7 @@ public class GroupChatroomFrame extends ChatFrame implements ActionListener {
 			msg = sender + ":" + message;
 			System.out.println("------"+msg);
 		}
+		System.out.println("HH:" + msg);
 		return msg;
 	}
 }

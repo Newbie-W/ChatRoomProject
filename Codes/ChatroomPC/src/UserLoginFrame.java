@@ -148,7 +148,8 @@ public class UserLoginFrame extends JFrame implements ActionListener, MouseListe
 				JOptionPane.showMessageDialog(null, "µÇÂ¼³É¹¦");
 				con.closeSt();
 				this.setVisible(false);
-				new UserMainFrame(new User(uname, pwd));
+				UserMainFrame mainFrame = new UserMainFrame(new User(uname, pwd));
+				mainFrame.setUname(uname.trim());
 			}
 		}
 	}

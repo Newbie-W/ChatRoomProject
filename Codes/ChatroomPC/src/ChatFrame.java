@@ -66,13 +66,17 @@ public class ChatFrame extends JFrame implements ActionListener {
 	public void actionProcessor() {
 		msgSendTf.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				contentTa.append(msgSendTf.getText()+"\n");
+				String t = "########"+msgSendTf.getText()+"\n";
+				contentTa.append(t);
+				System.out.println(t);
 				msgSendTf.setText("");
 			}
 		});
 		sendBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				contentTa.append(msgSendTf.getText()+"\n");
+				String t = msgSendTf.getText()+"\n";
+				contentTa.append(t);
+				System.out.println(t);
 				msgSendTf.setText("");
 			}
 		});

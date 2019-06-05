@@ -14,6 +14,7 @@ public class FriendPanel extends JPanel implements ActionListener, ListSelection
 	JList userList;
 	JScrollPane scrollUser;
 	boolean isFriendPanelOpen = true;
+	String uname;
 	
 	FriendPanel() {
 		initPanel();
@@ -56,6 +57,10 @@ public class FriendPanel extends JPanel implements ActionListener, ListSelection
 		userList.addMouseListener(this);
 	}
 	
+	public void setUname(String name) {
+		uname = name;
+	}
+	
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == friendBtn) {
 			if (isFriendPanelOpen) {
@@ -86,6 +91,9 @@ public class FriendPanel extends JPanel implements ActionListener, ListSelection
 			System.out.println(""+ title);
 			PrivateChatroomFrame privateChat = new PrivateChatroomFrame();
 			privateChat.setTitle(""+title);
+			privateChat.setUserName(uname);
+			privateChat.setFriendName(title);
+			System.out.println("用户名："+uname+"接收方："+title);
 		}
 	}
 

@@ -10,7 +10,7 @@ import java.util.*;
 public class PrivateChatroomFrame extends ChatFrame implements ActionListener {
 	JLabel isFriendOnlineL, portL, ipL, friendPortL, friendIpL, historyMsgL;	//isOnline那个，用于显示用户是否在线，暂时未设，备用
 	Socket socket;
-	String s=null;
+	String s=null, userName, friendName;
 	DataInputStream in;
 	DataOutputStream out;
 	int connectServerPort;
@@ -70,6 +70,14 @@ public class PrivateChatroomFrame extends ChatFrame implements ActionListener {
 				msgSendTf.setText("");
 			}
 		});
+	}
+	
+	public void setUserName(String name) {
+		userName = name;
+	}
+	
+	public void setFriendName(String name) {
+		friendName  = name;
 	}
 	
 	public void closeConnect() {
