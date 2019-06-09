@@ -38,7 +38,7 @@ public class Server {
 			sendMessageToAll(msg);
 			isOffline = false;
 		} else {
-			String msg = uname + ":" + message;
+			String msg = uname + ":<br> &emsp;&emsp;" + message;
 			sendMessageToAll(msg);
 		}
 	}
