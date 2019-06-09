@@ -3,13 +3,13 @@
 
 -----
 
-## 本项目包含以下一个方面
+## 本项目包含以下几个方面
 
 *	Codes
 	> 代码文件
 	其中包含了 [**PC端**](https://github.com/Newbie-W/ChatRoomProject/tree/master/Codes/ChatroomPC) 、 [**微信小程序端**](https://github.com/Newbie-W/ChatRoomProject/tree/master/Codes/ChatroomWX) 、 [**Web端**](https://github.com/Newbie-W/ChatRoomProject/tree/master/Codes/ChatroomWeb) 的程序代码
 	>> **1.[PC端](https://github.com/Newbie-W/ChatRoomProject/tree/master/Codes/ChatroomPC)**
-	使用了Java语言，通过eclipse开发，实现socket连接，通过jdbc连接Access数据库，实现了多线程的方式。
+	使用了Java语言，通过eclipse开发，实现socket连接，通过jdbc连接Access数据库，实现了多线程的方式。（也许目前因时间原因还有些bug，将会抽空改进）
 	
 	
 	>> **2.[微信小程序端](https://github.com/Newbie-W/ChatRoomProject/tree/master/Codes/ChatroomWX)**
