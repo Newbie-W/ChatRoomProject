@@ -336,6 +336,7 @@ public class ServerChatroomFrame extends ChatFrame implements ActionListener {
 		//还需进一步修订
 		/*发送信息
 		 * 关闭连接： 		CLOSE
+		 * 私聊			PLOGIN@@@发送人@@@接收人@@@IP
 		 * 登录： 			LOGIN@@@用户名@@@IP@@@PORT
 		 * 发送群聊信息 ： 	MESSAGE@@@发送人@@@ALL@@@信息内容
 		 * 发送私聊信息：  	MESSAGE@@@发送人@@@接收人@@@信息内容
